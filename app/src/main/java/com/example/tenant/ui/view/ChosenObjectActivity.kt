@@ -17,6 +17,7 @@ class ChosenObjectActivity : AppCompatActivity() {
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
         initTabLayout()
+        actionBar?.title = "Chosen Object"
     }
 
     private fun initTabLayout(){
