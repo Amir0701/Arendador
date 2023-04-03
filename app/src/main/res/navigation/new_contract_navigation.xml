@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/new_contract_fragment"
+    app:startDestination="@id/objectsFragment">
+
+    <fragment
+        android:id="@+id/objectsFragment"
+        android:name="com.example.tenant.ui.view.ObjectsFragment"
+        android:label="fragment_objects"
+        tools:layout="@layout/fragment_objects" >
+        <action
+            android:id="@+id/action_objectsFragment_to_arendatorFragment"
+            app:destination="@id/arendatorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/arendatorFragment"
+        android:name="com.example.tenant.ui.view.ArendatorFragment"
+        android:label="fragment_arendator"
+        tools:layout="@layout/fragment_arendator" >
+        <action
+            android:id="@+id/action_arendatorFragment_to_newObjectFragment"
+            app:destination="@id/newObjectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newObjectFragment"
+        android:name="com.example.tenant.ui.view.NewContractFragment"
+        android:label="fragment_new_object"
+        tools:layout="@layout/fragment_new_contract" />
+</navigation>

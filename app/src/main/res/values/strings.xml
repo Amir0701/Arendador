@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Tenant</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <string name="fillIn">Заполните</string>
+    <string name="tenant_name">Имя</string>
+    <string name="tenant_lastname">Фамилия</string>
+    <string name="tenant_date_of_birth">Дата рождения</string>
+    <string name="passport">Номер Пасспорта</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="date_fill_in">Выберите дату</string>
+    <string name="date_of_conclusion">Дата заключения</string>
+    <string name="date_of_end_conclusion">Дата окончания</string>
+    <string name="sum">Сумма</string>
+    <string name="zalog">Залог</string>
+</resources>
