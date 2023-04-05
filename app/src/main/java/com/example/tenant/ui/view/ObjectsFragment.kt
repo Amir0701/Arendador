@@ -45,8 +45,10 @@ class ObjectsFragment : Fragment() {
         super.onStart()
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         observe()
+        observeObj()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
+        mainActivityViewModel.getObject(1)
     }
 
     private fun initRecycler(){
@@ -69,6 +71,14 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel.objectIdLiveDate.observe(viewLifecycleOwner, Observer {
             it?.let {id->
                 Log.i("objId", id.toString())
+            }
+        })
+    }
+
+    private fun observeObj(){
+        mainActivityViewModel.objectLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {obj ->
+                Log.i("obj", obj.toString())
             }
         })
     }

@@ -11,8 +11,14 @@ import kotlinx.coroutines.launch
 class MainActivityViewModel(app: Application,
                             val objectRepository: ObjectRepository): AndroidViewModel(app) {
     val objectIdLiveDate = MutableLiveData<Int?>()
+    val objectLiveData = MutableLiveData<Obbject>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch {
         objectRepository.add(obbject)
+    }
+
+    fun getObject(id: Int) = viewModelScope.launch {
+        val res = objectRepository.getObjectById(id)
+        objectLiveData.postValue(res)
     }
 }
