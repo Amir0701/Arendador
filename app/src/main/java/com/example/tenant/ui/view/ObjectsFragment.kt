@@ -2,20 +2,24 @@ package com.example.tenant.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectStatus
+import com.example.tenant.ui.model.MainActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ObjectsFragment : Fragment() {
     private lateinit var objectsRecyclerView: RecyclerView
+    private lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +41,14 @@ class ObjectsFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
+        observe()
+        val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
+        //mainActivityViewModel.addObject(objec1)
+    }
+
     private fun initRecycler(){
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         val objec2 = Obbject(2, "Дача", 2, ObjectStatus.FREE, 44.0, "")
@@ -49,6 +61,14 @@ class ObjectsFragment : Fragment() {
             override fun onItemClick(obbject: Obbject) {
                 val intent = Intent(activity, ChosenObjectActivity::class.java)
                 startActivity(intent)
+            }
+        })
+    }
+
+    private fun observe(){
+        mainActivityViewModel.objectIdLiveDate.observe(viewLifecycleOwner, Observer {
+            it?.let {id->
+                Log.i("objId", id.toString())
             }
         })
     }
