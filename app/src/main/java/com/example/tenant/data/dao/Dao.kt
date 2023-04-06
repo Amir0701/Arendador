@@ -19,4 +19,7 @@ interface Dao {
 
     @Query("SELECT * FROM Category")
     suspend fun getAllCategories(): List<Category>
+
+    @Query("SELECT * FROM Obbject")
+    suspend fun getAllObjects(): List<Obbject>
 }

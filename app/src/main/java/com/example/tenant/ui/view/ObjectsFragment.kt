@@ -22,6 +22,7 @@ class ObjectsFragment : Fragment() {
     private lateinit var objectsRecyclerView: RecyclerView
     private lateinit var mainActivityViewModel: MainActivityViewModel
 
+    val adapter = ObjectsAdapter()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +36,6 @@ class ObjectsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val addNewObjectButton: FloatingActionButton = view.findViewById(R.id.add_new_object)
         objectsRecyclerView = view.findViewById(R.id.objectsRecycler)
-        initRecycler()
 
         addNewObjectButton.setOnClickListener {
             findNavController().navigate(R.id.action_objectsFragment_to_arendatorFragment)
@@ -48,6 +48,7 @@ class ObjectsFragment : Fragment() {
         observe()
         observeObj()
         observeCategories()
+        observeObjects()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
         mainActivityViewModel.getObject(1)
@@ -56,14 +57,16 @@ class ObjectsFragment : Fragment() {
         //mainActivityViewModel.addCategory(Category(0, "Комната"))
         //mainActivityViewModel.addCategory(Category(0, "Гараж"))
         mainActivityViewModel.getAllCategories()
+        mainActivityViewModel.getAllObjects()
+
+        initRecycler()
     }
 
     private fun initRecycler(){
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         val objec2 = Obbject(2, "Дача", 2, ObjectStatus.FREE, 44.0, "")
         val list = listOf(objec1, objec2)
-        val adapter = ObjectsAdapter()
-        adapter.objectsList = list
+        //adapter.objectsList = list
         objectsRecyclerView.adapter = adapter
         objectsRecyclerView.layoutManager = LinearLayoutManager(context)
         adapter.setObjectItemClickListener(object: ObjectsAdapter.ObjectItemClickListener{
@@ -96,6 +99,14 @@ class ObjectsFragment : Fragment() {
                 list.forEach { cat->
                     Log.i("cat", cat.name)
                 }
+            }
+        })
+    }
+
+    private fun observeObjects(){
+        mainActivityViewModel.objectsLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {list->
+                adapter.objectsList = list
             }
         })
     }
