@@ -47,13 +47,15 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         observe()
         observeObj()
+        observeCategories()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
         mainActivityViewModel.getObject(1)
         //mainActivityViewModel.addCategory(Category(0, "Квартира"))
-        mainActivityViewModel.addCategory(Category(0, "Дача"))
-        mainActivityViewModel.addCategory(Category(0, "Комната"))
-        mainActivityViewModel.addCategory(Category(0, "Гараж"))
+        //mainActivityViewModel.addCategory(Category(0, "Дача"))
+        //mainActivityViewModel.addCategory(Category(0, "Комната"))
+        //mainActivityViewModel.addCategory(Category(0, "Гараж"))
+        mainActivityViewModel.getAllCategories()
     }
 
     private fun initRecycler(){
@@ -84,6 +86,16 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel.objectLiveData.observe(viewLifecycleOwner, Observer {
             it?.let {obj ->
                 Log.i("obj", obj.toString())
+            }
+        })
+    }
+
+    private fun observeCategories(){
+        mainActivityViewModel.categoryLiveData.observe(viewLifecycleOwner, Observer{
+            it?.let{list->
+                list.forEach { cat->
+                    Log.i("cat", cat.name)
+                }
             }
         })
     }

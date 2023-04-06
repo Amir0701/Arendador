@@ -5,4 +5,5 @@ import com.example.tenant.data.model.Category
 
 class CategoryRepository(private val dao: Dao) {
     suspend fun addCategory(category: Category) = dao.addCategory(category)
+    suspend fun getAllCategories() = dao.getAllCategories()
 }

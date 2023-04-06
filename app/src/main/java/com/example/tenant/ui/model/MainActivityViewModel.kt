@@ -16,6 +16,7 @@ class MainActivityViewModel(app: Application,
                             private val categoryRepository: CategoryRepository): AndroidViewModel(app) {
     val objectIdLiveDate = MutableLiveData<Int?>()
     val objectLiveData = MutableLiveData<Obbject>()
+    val categoryLiveData = MutableLiveData<List<Category>>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
@@ -28,5 +29,10 @@ class MainActivityViewModel(app: Application,
 
     fun addCategory(category: Category) = viewModelScope.launch(Dispatchers.IO) {
         categoryRepository.addCategory(category)
+    }
+
+    fun getAllCategories() = viewModelScope.launch {
+        val categories = categoryRepository.getAllCategories()
+        categoryLiveData.postValue(categories)
     }
 }
