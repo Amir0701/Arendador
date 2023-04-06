@@ -4,21 +4,29 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
+import com.example.tenant.data.repository.CategoryRepository
 import com.example.tenant.data.repository.ObjectRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(app: Application,
-                            val objectRepository: ObjectRepository): AndroidViewModel(app) {
+                            private val objectRepository: ObjectRepository,
+                            private val categoryRepository: CategoryRepository): AndroidViewModel(app) {
     val objectIdLiveDate = MutableLiveData<Int?>()
     val objectLiveData = MutableLiveData<Obbject>()
 
-    fun addObject(obbject: Obbject) = viewModelScope.launch {
+    fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
     }
 
-    fun getObject(id: Int) = viewModelScope.launch {
+    fun getObject(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         val res = objectRepository.getObjectById(id)
         objectLiveData.postValue(res)
+    }
+
+    fun addCategory(category: Category) = viewModelScope.launch(Dispatchers.IO) {
+        categoryRepository.addCategory(category)
     }
 }
