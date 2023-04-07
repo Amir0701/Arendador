@@ -22,4 +22,5 @@ interface Dao {
 
     @Query("SELECT * FROM Obbject")
     suspend fun getAllObjects(): List<Obbject>
+
 }

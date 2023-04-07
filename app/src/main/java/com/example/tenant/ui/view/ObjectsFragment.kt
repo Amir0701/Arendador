@@ -38,7 +38,7 @@ class ObjectsFragment : Fragment() {
         objectsRecyclerView = view.findViewById(R.id.objectsRecycler)
 
         addNewObjectButton.setOnClickListener {
-            findNavController().navigate(R.id.action_objectsFragment_to_arendatorFragment)
+            findNavController().navigate(R.id.action_objectsFragment_to_newObjectFragment2)
         }
     }
 
@@ -47,7 +47,6 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         observe()
         observeObj()
-        observeCategories()
         observeObjects()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
@@ -56,7 +55,6 @@ class ObjectsFragment : Fragment() {
         //mainActivityViewModel.addCategory(Category(0, "Дача"))
         //mainActivityViewModel.addCategory(Category(0, "Комната"))
         //mainActivityViewModel.addCategory(Category(0, "Гараж"))
-        mainActivityViewModel.getAllCategories()
         mainActivityViewModel.getAllObjects()
 
         initRecycler()
@@ -93,15 +91,6 @@ class ObjectsFragment : Fragment() {
         })
     }
 
-    private fun observeCategories(){
-        mainActivityViewModel.categoryLiveData.observe(viewLifecycleOwner, Observer{
-            it?.let{list->
-                list.forEach { cat->
-                    Log.i("cat", cat.name)
-                }
-            }
-        })
-    }
 
     private fun observeObjects(){
         mainActivityViewModel.objectsLiveData.observe(viewLifecycleOwner, Observer {
