@@ -35,5 +35,9 @@
         android:id="@+id/newObjectFragment2"
         android:name="com.example.tenant.ui.view.NewObjectFragment"
         android:label="fragment_new_object"
-        tools:layout="@layout/fragment_new_object" />
+        tools:layout="@layout/fragment_new_object" >
+        <action
+            android:id="@+id/action_newObjectFragment2_to_objectsFragment"
+            app:destination="@id/objectsFragment" />
+    </fragment>
 </navigation>

@@ -14,4 +14,6 @@
     <string name="date_of_end_conclusion">Дата окончания</string>
     <string name="sum">Сумма</string>
     <string name="zalog">Залог</string>
+
+    <string name="choose_category">Выберите вид</string>
 </resources>

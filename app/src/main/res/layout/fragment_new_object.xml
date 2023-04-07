@@ -15,6 +15,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:hint="Название"
+        app:helperTextTextColor="@color/red"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -35,6 +36,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:hint="Вид объекта"
+        app:helperTextTextColor="@color/red"
         app:layout_constraintTop_toBottomOf="@id/nameInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -88,5 +90,19 @@
             android:layout_height="wrap_content"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/addObjectButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="10dp"
+        android:text="Добавить"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addressInputLayout"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
