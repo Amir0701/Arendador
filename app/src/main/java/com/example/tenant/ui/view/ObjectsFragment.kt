@@ -72,6 +72,9 @@ class ObjectsFragment : Fragment() {
         adapter.setObjectItemClickListener(object: ObjectsAdapter.ObjectItemClickListener{
             override fun onItemClick(objectAndCategory: ObjectAndCategory) {
                 val intent = Intent(activity, ChosenObjectActivity::class.java)
+                val bundle = Bundle()
+                bundle.putSerializable("object", objectAndCategory)
+                intent.putExtra("intentObject", bundle)
                 startActivity(intent)
             }
         })

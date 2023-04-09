@@ -11,4 +11,4 @@ data class ObjectAndCategory(
     var square: Double?,
     val address: String?,
     val categoryName: String
-)
+): java.io.Serializable
