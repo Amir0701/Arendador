@@ -5,6 +5,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
+import com.example.tenant.data.model.ObjectAndCategory
 
 @androidx.room.Dao
 interface Dao {
@@ -23,4 +24,8 @@ interface Dao {
     @Query("SELECT * FROM Obbject")
     suspend fun getAllObjects(): List<Obbject>
 
+    @Query("SELECT obbject.id, obbject.name, obbject.category_id AS categoryId, " +
+            "obbject.status as objectStatus, obbject.square, obbject.address, category.name AS categoryName " +
+            "FROM obbject INNER JOIN category ON obbject.category_id=category.id")
+    suspend fun getAllObjectsWithCategory(): List<ObjectAndCategory>
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
+import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.repository.CategoryRepository
 import com.example.tenant.data.repository.ObjectRepository
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ class MainActivityViewModel(app: Application,
     val objectLiveData = MutableLiveData<Obbject>()
     val categoryLiveData = MutableLiveData<List<Category>>()
     val objectsLiveData = MutableLiveData<List<Obbject>>()
+    val objectsWithCategory = MutableLiveData<List<ObjectAndCategory>>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
@@ -40,5 +42,10 @@ class MainActivityViewModel(app: Application,
     fun getAllObjects() = viewModelScope.launch(Dispatchers.IO) {
         val objects = objectRepository.getAllObjects()
         objectsLiveData.postValue(objects)
+    }
+
+    fun getObjectsWithCategory() = viewModelScope.launch(Dispatchers.IO){
+        val res = objectRepository.getObjectsWithCategory()
+        objectsWithCategory.postValue(res)
     }
 }

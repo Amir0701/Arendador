@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
+import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.ui.model.MainActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,6 +49,7 @@ class ObjectsFragment : Fragment() {
         observe()
         observeObj()
         observeObjects()
+        observeObjectsWithCategory()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
         mainActivityViewModel.getObject(1)
@@ -56,7 +58,7 @@ class ObjectsFragment : Fragment() {
         //mainActivityViewModel.addCategory(Category(0, "Комната"))
         //mainActivityViewModel.addCategory(Category(0, "Гараж"))
         mainActivityViewModel.getAllObjects()
-
+        mainActivityViewModel.getObjectsWithCategory()
         initRecycler()
     }
 
@@ -68,7 +70,7 @@ class ObjectsFragment : Fragment() {
         objectsRecyclerView.adapter = adapter
         objectsRecyclerView.layoutManager = LinearLayoutManager(context)
         adapter.setObjectItemClickListener(object: ObjectsAdapter.ObjectItemClickListener{
-            override fun onItemClick(obbject: Obbject) {
+            override fun onItemClick(objectAndCategory: ObjectAndCategory) {
                 val intent = Intent(activity, ChosenObjectActivity::class.java)
                 startActivity(intent)
             }
@@ -94,6 +96,14 @@ class ObjectsFragment : Fragment() {
 
     private fun observeObjects(){
         mainActivityViewModel.objectsLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {list->
+                //adapter.objectsList = list
+            }
+        })
+    }
+
+    private fun observeObjectsWithCategory(){
+        mainActivityViewModel.objectsWithCategory.observe(viewLifecycleOwner, Observer {
             it?.let {list->
                 adapter.objectsList = list
             }

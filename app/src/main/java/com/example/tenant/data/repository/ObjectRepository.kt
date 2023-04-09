@@ -9,4 +9,6 @@ class ObjectRepository(private val dao: Dao) {
     suspend fun getObjectById(id: Int) = dao.getObjectById(id)
 
     suspend fun getAllObjects() = dao.getAllObjects()
+
+    suspend fun getObjectsWithCategory() = dao.getAllObjectsWithCategory()
 }

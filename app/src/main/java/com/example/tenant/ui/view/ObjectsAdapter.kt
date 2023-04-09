@@ -7,10 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
+import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
+import com.example.tenant.data.model.ObjectWithContracts
 
 class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
-    var objectsList: List<Obbject> = ArrayList()
+    var objectsList: List<ObjectAndCategory> = ArrayList()
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val nameTextView: TextView = itemView.findViewById(R.id.cardObjectName)
@@ -27,7 +29,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
         val currentObject = objectsList[position]
 
         holder.nameTextView.text = currentObject.name
-        holder.categoryTextView.text = currentObject.categoryId.toString()
+        holder.categoryTextView.text = currentObject.categoryName
         when (currentObject.objectStatus) {
             ObjectStatus.FREE -> {
                 holder.statusTextView.text = "Свободный"
@@ -53,7 +55,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
     }
 
     interface ObjectItemClickListener{
-        fun onItemClick(obbject: Obbject)
+        fun onItemClick(objectAndCategory: ObjectAndCategory)
     }
 
     private var objectItemClickListener: ObjectItemClickListener? = null
