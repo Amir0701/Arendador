@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
@@ -12,7 +14,25 @@ import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.data.model.ObjectWithContracts
 
 class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
-    var objectsList: List<ObjectAndCategory> = ArrayList()
+
+    private val differ = object: DiffUtil.ItemCallback<ObjectAndCategory>(){
+        override fun areItemsTheSame(
+            oldItem: ObjectAndCategory,
+            newItem: ObjectAndCategory
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: ObjectAndCategory,
+            newItem: ObjectAndCategory
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    val objectsList = AsyncListDiffer(this, differ)
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val nameTextView: TextView = itemView.findViewById(R.id.cardObjectName)
@@ -26,7 +46,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentObject = objectsList[position]
+        val currentObject = objectsList.currentList[position]
 
         holder.nameTextView.text = currentObject.name
         holder.categoryTextView.text = currentObject.categoryName
@@ -51,7 +71,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return objectsList.size
+        return objectsList.currentList.size
     }
 
     interface ObjectItemClickListener{

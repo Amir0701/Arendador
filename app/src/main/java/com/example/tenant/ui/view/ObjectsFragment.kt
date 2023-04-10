@@ -108,7 +108,7 @@ class ObjectsFragment : Fragment() {
     private fun observeObjectsWithCategory(){
         mainActivityViewModel.objectsWithCategory.observe(viewLifecycleOwner, Observer {
             it?.let {list->
-                adapter.objectsList = list
+                adapter.objectsList.submitList(list)
             }
         })
     }
