@@ -25,6 +25,9 @@ class ExplotationListFragment : Fragment() {
         addExploitationButton = view.findViewById(R.id.addExploitationButton)
         addExploitationButton.setOnClickListener {
             val intent = Intent(activity, NewExploitationActivity::class.java)
+            (activity as ChosenObjectActivity).objectAndCategory?.let {
+                intent.putExtra("obj_id", it.id)
+            }
             startActivity(intent)
         }
     }

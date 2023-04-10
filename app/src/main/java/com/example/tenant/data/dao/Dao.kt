@@ -4,6 +4,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tenant.data.model.Category
+import com.example.tenant.data.model.Exploitation
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 
@@ -28,4 +29,10 @@ interface Dao {
             "obbject.status as objectStatus, obbject.square, obbject.address, category.name AS categoryName " +
             "FROM obbject INNER JOIN category ON obbject.category_id=category.id")
     suspend fun getAllObjectsWithCategory(): List<ObjectAndCategory>
+
+    @Query("SELECT * FROM exploitation WHERE object_id = :objectId")
+    suspend fun getAllExploitation(objectId: Int): List<Exploitation>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addExploitation(exploitation: Exploitation)
 }
