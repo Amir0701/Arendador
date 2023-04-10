@@ -1,20 +1,18 @@
 package com.example.tenant
 
 import android.app.Application
-import androidx.room.Room
-import com.example.tenant.data.AppDatabase
+import com.example.tenant.ioc.component.AppComponent
+import com.example.tenant.ioc.component.DaggerAppComponent
+import com.example.tenant.ioc.module.RoomDBModule
+import com.example.tenant.ioc.scope.AppScope
 
 class App: Application() {
-
-    val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "TenantDB"
-        ).build()
-    }
+    lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-
+        appComponent = DaggerAppComponent.builder()
+            .roomDBModule(RoomDBModule(applicationContext))
+            .build()
     }
 }

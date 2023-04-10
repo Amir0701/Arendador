@@ -9,10 +9,12 @@ import com.example.tenant.App
 import com.example.tenant.R
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.repository.ExploitationRepository
+import com.example.tenant.ioc.component.ChosenActivityComponent
 import com.example.tenant.ui.model.ChosenActivityViewModel
 import com.example.tenant.ui.model.ChosenActivityViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import javax.inject.Inject
 
 class ChosenObjectActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
@@ -21,11 +23,17 @@ class ChosenObjectActivity : AppCompatActivity() {
 
     var objectAndCategory: ObjectAndCategory? = null
 
+    lateinit var chosenActivityComponent: ChosenActivityComponent
+    @Inject
+    lateinit var exploitationRepository: ExploitationRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chosen_object)
-        val factory = ChosenActivityViewModelFactory((application as App),
-            ExploitationRepository((application as App).db.getDao()))
+        chosenActivityComponent = (application as App).appComponent.getChosenActivityComponent()
+        chosenActivityComponent.inject(this)
+        val factory = ChosenActivityViewModelFactory((application as App), exploitationRepository)
+
         chosenActivityViewModel = ViewModelProvider(this, factory)[ChosenActivityViewModel::class.java]
         val bundle = intent.getBundleExtra("intentObject")
         objectAndCategory = bundle?.let {
