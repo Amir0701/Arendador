@@ -3,6 +3,7 @@ package com.example.tenant.data.dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.tenant.data.model.*
 
 @androidx.room.Dao
@@ -41,4 +42,14 @@ interface Dao {
 
     @Query("SELECT * FROM tenant")
     suspend fun getAllTenant(): List<Tenant>
+
+    @Transaction
+    @Query("SELECT contract.id, contract.object_id AS objectId, contract.tenant_id as tenantId," +
+            " contract.sum, contract.date_of_contract as dateOfContract," +
+            "contract.date_of_end as dateOfEnd, contract.pay_time as timeOfPay, contract.zalog, contract.status, " +
+            "tenant.first_name AS firstName, tenant.last_name as lastName, " +
+            "tenant.date_of_birth as dateOfBirth, tenant.passport_number as passportNumber, " +
+            "tenant.phone_number as phoneNumber FROM contract INNER JOIN tenant ON contract.tenant_id = tenant.id " +
+            "WHERE contract.object_id = :objectId")
+    suspend fun getContractWithTenant(objectId: Int): List<ContractWithTenant>
 }

@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.tenant.App
 import com.example.tenant.R
 import com.example.tenant.data.model.ObjectAndCategory
+import com.example.tenant.data.repository.ContractRepository
 import com.example.tenant.data.repository.ExploitationRepository
 import com.example.tenant.ioc.component.ChosenActivityComponent
 import com.example.tenant.ui.model.ChosenActivityViewModel
@@ -27,12 +28,15 @@ class ChosenObjectActivity : AppCompatActivity() {
     @Inject
     lateinit var exploitationRepository: ExploitationRepository
 
+    @Inject
+    lateinit var contractRepository: ContractRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chosen_object)
         chosenActivityComponent = (application as App).appComponent.getChosenActivityComponent()
         chosenActivityComponent.inject(this)
-        val factory = ChosenActivityViewModelFactory((application as App), exploitationRepository)
+        val factory = ChosenActivityViewModelFactory((application as App), exploitationRepository, contractRepository)
 
         chosenActivityViewModel = ViewModelProvider(this, factory)[ChosenActivityViewModel::class.java]
         val bundle = intent.getBundleExtra("intentObject")
