@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import com.example.tenant.R
@@ -31,6 +33,8 @@ class NewContractFragment : Fragment() {
     private lateinit var sumInputLayout: TextInputLayout
     private lateinit var zalogEditTextInputLayout: TextInputLayout
     private lateinit var zalogEditText: EditText
+    private lateinit var timeToPayLayout: TextInputLayout
+    private lateinit var timeToPay: AutoCompleteTextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,9 +47,9 @@ class NewContractFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
+        setUpTimeToPayList()
         setDateOfConclusionListener()
         setDateOfEndListener()
-
         nextButton.setOnClickListener {
             getData()?.let {
                 val intent = Intent(activity, ChosenObjectActivity::class.java)
@@ -64,6 +68,14 @@ class NewContractFragment : Fragment() {
         sumInputLayout = view.findViewById(R.id.sumLayout)
         zalogEditTextInputLayout = view.findViewById(R.id.zalogInputLayout)
         zalogEditText = view.findViewById(R.id.zalogEditText)
+        timeToPayLayout = view.findViewById(R.id.timeToPayInputLayout)
+        timeToPay = view.findViewById(R.id.timeToPayList)
+    }
+
+    private fun setUpTimeToPayList(){
+        R.array.pay_time_array
+        val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.pay_time_array, R.layout.dropdown_item)
+        timeToPay.setAdapter(adapter)
     }
 
     private fun setDateOfConclusionListener(){
@@ -152,8 +164,21 @@ class NewContractFragment : Fragment() {
             null
         }
 
-        if(startDate != null && endDate != null && sum != null){
-            return Contract(0, 0, 0, sum, startDate, endDate, PayTime.DAY, zalog, ContractStatus.ACTIVE)
+        val payTime: PayTime? = if(timeToPay.text.toString() != "Время оплаты"){
+            val pay = when(timeToPay.text.toString()){
+                "Каждый день" -> PayTime.DAY
+                "Раз в месяц" -> PayTime.MONTH
+                else -> PayTime.HALF_MONTH
+            }
+            pay
+
+        }else{
+            timeToPayLayout.helperText = "Выберите время оплаты"
+            null
+        }
+
+        if(startDate != null && endDate != null && sum != null && payTime != null){
+            return Contract(0, 0, 0, sum, startDate, endDate, payTime, zalog, ContractStatus.ACTIVE)
         }
 
         return null

@@ -19,4 +19,4 @@ data class Tenant(
     val passportNumber: String,
     @ColumnInfo("phone_number")
     var phoneNumber: String
-)
+): java.io.Serializable

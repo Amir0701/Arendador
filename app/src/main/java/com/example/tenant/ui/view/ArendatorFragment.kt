@@ -43,7 +43,7 @@ class ArendatorFragment : Fragment() {
         setDateOnClickListener()
         addUserButton.setOnClickListener {
             getData()?.let {
-                findNavController().navigate(R.id.action_arendatorFragment_to_newObjectFragment)
+                findNavController().navigate(R.id.action_arendatorFragment_to_newContractFragment)
             }
 
         }

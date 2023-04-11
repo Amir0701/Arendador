@@ -79,14 +79,28 @@
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/timeToPay"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/timeToPayInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Время оплаты"
+            app:helperTextTextColor="@color/red"
             app:layout_constraintTop_toBottomOf="@id/sumLayout"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/timeToPayList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:inputType="none"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -99,7 +113,7 @@
             app:helperTextTextColor="@color/red"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeToPay">
+            app:layout_constraintTop_toBottomOf="@+id/timeToPayInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/zalogEditText"

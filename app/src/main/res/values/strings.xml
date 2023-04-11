@@ -16,4 +16,10 @@
     <string name="zalog">Залог</string>
 
     <string name="choose_category">Выберите вид</string>
+
+    <string-array name="pay_time_array">
+        <item>Раз в месяц</item>
+        <item>Два раза в месяц</item>
+        <item>Каждый день</item>
+    </string-array>
 </resources>
