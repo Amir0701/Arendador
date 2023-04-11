@@ -26,6 +26,9 @@ class ArendaObjectFragment : Fragment() {
 
         addContractButton.setOnClickListener {
             val intent = Intent(activity, NewContractActivity::class.java)
+            (activity as ChosenObjectActivity).objectAndCategory?.let {
+                intent.putExtra("object", it)
+            }
             startActivity(intent)
         }
     }

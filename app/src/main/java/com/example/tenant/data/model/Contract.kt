@@ -11,9 +11,9 @@ data class Contract(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo("object_id")
-    val objectId: Int,
+    var objectId: Int,
     @ColumnInfo("tenant_id")
-    val tenantId: Int,
+    var tenantId: Int,
     var sum: Int,
     @ColumnInfo("date_of_contract")
     val dateOfContract: Date,

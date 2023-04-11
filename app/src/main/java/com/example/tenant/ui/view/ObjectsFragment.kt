@@ -60,6 +60,7 @@ class ObjectsFragment : Fragment() {
         //mainActivityViewModel.getAllObjects()
         mainActivityViewModel.getObjectsWithCategory()
         initRecycler()
+
     }
 
     private fun initRecycler(){

@@ -17,10 +17,7 @@
         android:name="com.example.tenant.ui.view.NewContractFragment"
         android:label="NewContractFragment" >
         <argument
-            android:name="tenant"
+            android:name="ten"
             app:argType="com.example.tenant.data.model.Tenant" />
-        <argument
-            android:name="object"
-            app:argType="com.example.tenant.data.model.ObjectAndCategory" />
     </fragment>
 </navigation>

@@ -12,16 +12,19 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import androidx.navigation.NavArgs
+import androidx.navigation.fragment.navArgs
 import com.example.tenant.R
-import com.example.tenant.data.model.Contract
-import com.example.tenant.data.model.ContractStatus
-import com.example.tenant.data.model.PayTime
+import com.example.tenant.data.model.*
+import com.example.tenant.ui.model.NewContractActivityViewModel
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class NewContractFragment : Fragment() {
+    private val args: NewContractFragmentArgs by navArgs()
+
     private lateinit var dateOfConclusion: EditText;
     private lateinit var dateOfEnd: EditText
     private val startCalendar = Calendar.getInstance()
@@ -36,6 +39,10 @@ class NewContractFragment : Fragment() {
     private lateinit var timeToPayLayout: TextInputLayout
     private lateinit var timeToPay: AutoCompleteTextView
 
+    private lateinit var viewModel: NewContractActivityViewModel
+
+    private lateinit var obbject: Obbject
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,14 +53,21 @@ class NewContractFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as NewContractActivity).newContractActivityViewModel
+
         initView(view)
         setUpTimeToPayList()
         setDateOfConclusionListener()
         setDateOfEndListener()
+
+        observeObject()
+        viewModel.getObjectById((activity as NewContractActivity).objectAndCategory?.id!!)
+        observeContract()
+
         nextButton.setOnClickListener {
             getData()?.let {
-                val intent = Intent(activity, ChosenObjectActivity::class.java)
-                startActivity(intent)
+                observeTenant(it)
+                viewModel.addTenant(args.ten)
             }
         }
     }
@@ -182,5 +196,33 @@ class NewContractFragment : Fragment() {
         }
 
         return null
+    }
+
+    private fun observeTenant(contract: Contract){
+        viewModel.tenantIdLiveDate.observe(viewLifecycleOwner, androidx.lifecycle.Observer{
+            it?.let {id->
+                contract.tenantId = id.toInt()
+                contract.objectId = (activity as NewContractActivity).objectAndCategory?.id!!
+                viewModel.addContract(contract)
+            }
+        })
+    }
+
+    private fun observeContract(){
+        viewModel.contractIdLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {id->
+                obbject.objectStatus = ObjectStatus.IN_TENANT
+                viewModel.updateObject(obbject)
+                (activity as NewContractActivity).finish()
+            }
+        })
+    }
+
+    private fun observeObject(){
+        viewModel.objectLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {obj->
+                obbject = obj
+            }
+        })
     }
 }

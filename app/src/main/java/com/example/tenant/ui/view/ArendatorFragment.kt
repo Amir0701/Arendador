@@ -42,10 +42,11 @@ class ArendatorFragment : Fragment() {
         initViews(view)
         setDateOnClickListener()
         addUserButton.setOnClickListener {
-            getData()?.let {
-                findNavController().navigate(R.id.action_arendatorFragment_to_newContractFragment)
+            getData()?.let {ten->
+                val bundle = Bundle()
+                bundle.putSerializable("ten", ten)
+                findNavController().navigate(R.id.action_arendatorFragment_to_newContractFragment, bundle)
             }
-
         }
     }
 

@@ -3,10 +3,7 @@ package com.example.tenant.data.dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.tenant.data.model.Category
-import com.example.tenant.data.model.Exploitation
-import com.example.tenant.data.model.Obbject
-import com.example.tenant.data.model.ObjectAndCategory
+import com.example.tenant.data.model.*
 
 @androidx.room.Dao
 interface Dao {
@@ -35,4 +32,13 @@ interface Dao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addExploitation(exploitation: Exploitation)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addContract(contract: Contract): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addTenant(tenant: Tenant): Long
+
+    @Query("SELECT * FROM tenant")
+    suspend fun getAllTenant(): List<Tenant>
 }
