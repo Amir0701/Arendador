@@ -60,7 +60,6 @@
         android:layout_marginStart="10dp"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:text="89870512246"
         app:layout_constraintStart_toEndOf="@id/phoneNumberTextView"
         app:layout_constraintTop_toBottomOf="@id/nameInputTextView"/>
 
