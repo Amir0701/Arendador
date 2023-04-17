@@ -1,9 +1,11 @@
 package com.example.tenant.ui.view
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.data.model.ObjectWithContracts
+import com.google.android.material.button.MaterialButton
 
 class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
@@ -38,6 +41,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
         val nameTextView: TextView = itemView.findViewById(R.id.cardObjectName)
         val categoryTextView: TextView = itemView.findViewById(R.id.cardObjectCategory)
         val statusTextView: TextView = itemView.findViewById(R.id.cardObjectStatus)
+        val editButton: MaterialButton = itemView.findViewById(R.id.editObjectButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -63,10 +67,17 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
                 holder.statusTextView.text = "В ремонте"
                 holder.statusTextView.setTextColor(holder.itemView.resources.getColor(R.color.blue))
             }
+
         }
 
         holder.itemView.setOnClickListener {
             objectItemClickListener?.onItemClick(currentObject)
+        }
+
+        holder.editButton.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("edit_object", currentObject)
+            it.findNavController().navigate(R.id.action_objectsFragment_to_newObjectFragment2, bundle)
         }
     }
 

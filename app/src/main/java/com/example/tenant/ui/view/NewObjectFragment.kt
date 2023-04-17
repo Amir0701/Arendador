@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectStatus
@@ -27,6 +28,8 @@ class NewObjectFragment : Fragment() {
     private lateinit var addressEditText: EditText
     private lateinit var nameInputLayout: TextInputLayout
     private lateinit var categoryInputLayout: TextInputLayout
+
+    private val args: NewObjectFragmentArgs by navArgs()
 
     private val categoryNames = mutableListOf<String>()
 
@@ -54,6 +57,8 @@ class NewObjectFragment : Fragment() {
                 findNavController().navigate(R.id.action_newObjectFragment2_to_objectsFragment)
             }
         }
+
+        setObject()
     }
 
     override fun onStart() {
@@ -63,15 +68,39 @@ class NewObjectFragment : Fragment() {
         mainActivityViewModel.getAllCategories()
     }
 
+    private fun setObject(){
+        args.editObject?.let {obj->
+            nameEditText.setText(obj.name)
+            obj.square?.let {
+                squareEditText.setText(it.toString())
+            }
+
+            obj.address?.let {
+                addressEditText.setText(it)
+            }
+
+            addObjectButton.text = "Изменить"
+        }
+    }
+
     private fun observeCategories(){
         mainActivityViewModel.categoryLiveData.observe(viewLifecycleOwner, Observer {
-            it?.let {list->
-                Log.i("categ", list.size.toString())
-                list.forEach {cat->
-                    categoryNames.add(cat.name)
+            var pos = 0
+            var i = 0
+            if(categoryList.adapter == null){
+                it?.let {list->
+                    list.forEach {cat->
+                        categoryNames.add(cat.name)
+                        if(cat.name == args.editObject?.name)
+                            pos = i
+                        i++
+                    }
+                    val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, categoryNames)
+                    categoryList.setAdapter(adapter)
+                    args.editObject?.let { obj->
+                        categoryList.setSelection(pos)
+                    }
                 }
-                val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, categoryNames)
-                categoryList.setAdapter(adapter)
             }
         })
     }
@@ -102,8 +131,8 @@ class NewObjectFragment : Fragment() {
             null
         }
 
-        val address:String? = if(nameEditText.text != null){
-            nameEditText.text.toString()
+        val address:String? = if(addressEditText.text != null){
+            addressEditText.text.toString()
         }
         else{
             null
@@ -117,18 +146,11 @@ class NewObjectFragment : Fragment() {
         }
 
         if(name != null && idCat != null){
+            args.editObject?.let {
+                return Obbject(it.id, name, idCat, it.objectStatus, square, address)
+            }
             return Obbject(0, name, idCat, ObjectStatus.FREE, square, address)
         }
         return null
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NewObjectFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
     }
 }
