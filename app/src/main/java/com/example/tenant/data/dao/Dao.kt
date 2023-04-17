@@ -1,9 +1,6 @@
 package com.example.tenant.data.dao
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.example.tenant.data.model.*
 
 @androidx.room.Dao
@@ -52,4 +49,14 @@ interface Dao {
             "tenant.phone_number as phoneNumber FROM contract INNER JOIN tenant ON contract.tenant_id = tenant.id " +
             "WHERE contract.object_id = :objectId")
     suspend fun getContractWithTenant(objectId: Int): List<ContractWithTenant>
+
+    @Query("DELETE FROM obbject WHERE obbject.id = :id")
+    suspend fun deleteObject(id: Int)
+
+    @Query("DELETE FROM contract WHERE contract.object_id = :id")
+    suspend fun deleteContractByObjectId(id: Int)
+
+    @Query("DELETE FROM exploitation WHERE exploitation.object_id = :id")
+    suspend fun deleteExploitationByObjectId(id: Int)
+
 }

@@ -42,6 +42,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
         val categoryTextView: TextView = itemView.findViewById(R.id.cardObjectCategory)
         val statusTextView: TextView = itemView.findViewById(R.id.cardObjectStatus)
         val editButton: MaterialButton = itemView.findViewById(R.id.editObjectButton)
+        val deleteButton: MaterialButton = itemView.findViewById(R.id.deleteObjectButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -79,6 +80,10 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
             bundle.putSerializable("edit_object", currentObject)
             it.findNavController().navigate(R.id.action_objectsFragment_to_newObjectFragment2, bundle)
         }
+
+        holder.deleteButton.setOnClickListener {
+            deleteItemClickListener?.onDeleteItem(currentObject)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -93,5 +98,15 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
     fun setObjectItemClickListener(objectItemClickListener: ObjectItemClickListener){
         this.objectItemClickListener = objectItemClickListener
+    }
+
+    interface DeleteItemClickListener{
+        fun onDeleteItem(objectAndCategory: ObjectAndCategory)
+    }
+
+    private var deleteItemClickListener: DeleteItemClickListener? = null
+
+    fun setDeleteItemClickListener(deleteItemClickListener: DeleteItemClickListener){
+        this.deleteItemClickListener = deleteItemClickListener
     }
 }

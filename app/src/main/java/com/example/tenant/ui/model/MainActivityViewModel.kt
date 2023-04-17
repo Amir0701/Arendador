@@ -8,13 +8,17 @@ import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.repository.CategoryRepository
+import com.example.tenant.data.repository.ContractRepository
+import com.example.tenant.data.repository.ExploitationRepository
 import com.example.tenant.data.repository.ObjectRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(app: Application,
                             private val objectRepository: ObjectRepository,
-                            private val categoryRepository: CategoryRepository): AndroidViewModel(app) {
+                            private val categoryRepository: CategoryRepository,
+                            private val contractRepository: ContractRepository,
+                            private val exploitationRepository: ExploitationRepository): AndroidViewModel(app) {
     val objectIdLiveDate = MutableLiveData<Int?>()
     val objectLiveData = MutableLiveData<Obbject>()
     val categoryLiveData = MutableLiveData<List<Category>>()
@@ -47,5 +51,11 @@ class MainActivityViewModel(app: Application,
     fun getObjectsWithCategory() = viewModelScope.launch(Dispatchers.IO){
         val res = objectRepository.getObjectsWithCategory()
         objectsWithCategory.postValue(res)
+    }
+
+    fun deleteObject(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+        objectRepository.deleteObject(id)
+        contractRepository.deleteContractByObjectId(id)
+        exploitationRepository.deleteExploitationByObjectId(id)
     }
 }

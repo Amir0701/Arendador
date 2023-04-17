@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tenant.App
 import com.example.tenant.R
 import com.example.tenant.data.model.Tenant
-import com.example.tenant.data.repository.CategoryRepository
-import com.example.tenant.data.repository.ObjectRepository
-import com.example.tenant.data.repository.TenantRepository
+import com.example.tenant.data.repository.*
 import com.example.tenant.ioc.component.MainActivityComponent
 import com.example.tenant.ui.model.MainActivityViewModel
 import com.example.tenant.ui.model.MainActivityViewModelFactory
@@ -33,13 +31,19 @@ class MainActivity: AppCompatActivity(){
     @Inject
     lateinit var tenantRepository: TenantRepository
 
+    @Inject
+    lateinit var contractRepository: ContractRepository
+
+    @Inject
+    lateinit var exploitationRepository: ExploitationRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.title = "Objects"
         mainActivityComponent = (application as App).appComponent.getMainActivityComponent()
         mainActivityComponent.inject(this)
-        val factory = MainActivityViewModelFactory(application, objectRepository, categoryRepository)
+        val factory = MainActivityViewModelFactory(application, objectRepository, categoryRepository, contractRepository, exploitationRepository)
         mainActivityViewModel = ViewModelProvider(this, factory)[MainActivityViewModel::class.java]
         var res: List<Tenant>? = null
         CoroutineScope(Dispatchers.IO).launch {

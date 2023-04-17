@@ -1,5 +1,7 @@
 package com.example.tenant.ui.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
-import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
@@ -60,7 +61,7 @@ class ObjectsFragment : Fragment() {
         //mainActivityViewModel.getAllObjects()
         mainActivityViewModel.getObjectsWithCategory()
         initRecycler()
-
+        setDeleteClickListener()
     }
 
     private fun initRecycler(){
@@ -110,6 +111,23 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel.objectsWithCategory.observe(viewLifecycleOwner, Observer {
             it?.let {list->
                 adapter.objectsList.submitList(list)
+            }
+        })
+    }
+
+    private fun setDeleteClickListener(){
+        adapter.setDeleteItemClickListener(object : ObjectsAdapter.DeleteItemClickListener{
+            override fun onDeleteItem(objectAndCategory: ObjectAndCategory) {
+                val alertDialogBuilder = AlertDialog.Builder(context)
+                alertDialogBuilder.setTitle("Удаление объекта")
+                alertDialogBuilder.setMessage("Вы уверены?")
+                alertDialogBuilder.setPositiveButton("Да") { p0, p1 ->
+                    mainActivityViewModel.deleteObject(objectAndCategory.id)
+                }
+                alertDialogBuilder.setNegativeButton("Нет"){ dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.cancel()
+                }
+                alertDialogBuilder.create().show()
             }
         })
     }
