@@ -13,5 +13,5 @@ class ObjectRepository @Inject constructor(private val dao: Dao) {
 
     suspend fun getObjectsWithCategory() = dao.getAllObjectsWithCategory()
 
-    suspend fun deleteObject(id: Int) = dao.deleteObject(id)
+    suspend fun deleteObject(id: Int): Int = dao.deleteObject(id)
 }

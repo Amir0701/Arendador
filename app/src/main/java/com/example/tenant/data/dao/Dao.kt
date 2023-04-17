@@ -51,7 +51,7 @@ interface Dao {
     suspend fun getContractWithTenant(objectId: Int): List<ContractWithTenant>
 
     @Query("DELETE FROM obbject WHERE obbject.id = :id")
-    suspend fun deleteObject(id: Int)
+    suspend fun deleteObject(id: Int): Int
 
     @Query("DELETE FROM contract WHERE contract.object_id = :id")
     suspend fun deleteContractByObjectId(id: Int)

@@ -51,6 +51,7 @@ class ObjectsFragment : Fragment() {
         observeObj()
         observeObjects()
         observeObjectsWithCategory()
+        observeDeleted()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
         //mainActivityViewModel.getObject(1)
@@ -111,6 +112,14 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel.objectsWithCategory.observe(viewLifecycleOwner, Observer {
             it?.let {list->
                 adapter.objectsList.submitList(list)
+            }
+        })
+    }
+
+    private fun observeDeleted(){
+        mainActivityViewModel.deletedObjectCount.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                mainActivityViewModel.getObjectsWithCategory()
             }
         })
     }

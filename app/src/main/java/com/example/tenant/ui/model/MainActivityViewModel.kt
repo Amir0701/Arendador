@@ -24,6 +24,7 @@ class MainActivityViewModel(app: Application,
     val categoryLiveData = MutableLiveData<List<Category>>()
     val objectsLiveData = MutableLiveData<List<Obbject>>()
     val objectsWithCategory = MutableLiveData<List<ObjectAndCategory>>()
+    val deletedObjectCount = MutableLiveData<Int?>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
@@ -54,8 +55,9 @@ class MainActivityViewModel(app: Application,
     }
 
     fun deleteObject(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-        objectRepository.deleteObject(id)
+        val count: Int = objectRepository.deleteObject(id)
         contractRepository.deleteContractByObjectId(id)
         exploitationRepository.deleteExploitationByObjectId(id)
+        deletedObjectCount.postValue(count)
     }
 }
