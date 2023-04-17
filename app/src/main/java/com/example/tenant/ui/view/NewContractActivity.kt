@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.example.tenant.App
 import com.example.tenant.R
+import com.example.tenant.data.model.ContractWithTenant
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.repository.ContractRepository
 import com.example.tenant.data.repository.ObjectRepository
@@ -17,7 +18,7 @@ import javax.inject.Inject
 class NewContractActivity : AppCompatActivity() {
     var objectAndCategory: ObjectAndCategory? = null
     lateinit var newContractActivityViewModel: NewContractActivityViewModel
-
+    var contractWithTenant: ContractWithTenant? = null
     @Inject
     lateinit var objectRepository: ObjectRepository
 
@@ -36,6 +37,8 @@ class NewContractActivity : AppCompatActivity() {
         newContractActivityComponent.inject(this)
 
         objectAndCategory = intent.getSerializableExtra("object") as ObjectAndCategory
+        contractWithTenant = intent.getSerializableExtra("con_with") as ContractWithTenant?
+
         val factory = NewContractActivityViewModelFactory(
             (application as App),
             objectRepository,

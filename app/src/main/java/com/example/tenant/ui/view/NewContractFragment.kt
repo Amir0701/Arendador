@@ -42,6 +42,7 @@ class NewContractFragment : Fragment() {
     private lateinit var viewModel: NewContractActivityViewModel
 
     private lateinit var obbject: Obbject
+    private var contractWithTenant: ContractWithTenant? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +71,8 @@ class NewContractFragment : Fragment() {
                 viewModel.addTenant(args.ten)
             }
         }
+
+        setContractData()
     }
 
     private fun initView(view: View){
@@ -84,6 +87,23 @@ class NewContractFragment : Fragment() {
         zalogEditText = view.findViewById(R.id.zalogEditText)
         timeToPayLayout = view.findViewById(R.id.timeToPayInputLayout)
         timeToPay = view.findViewById(R.id.timeToPayList)
+    }
+
+    private fun setContractData(){
+        contractWithTenant = (activity as NewContractActivity).contractWithTenant
+
+        contractWithTenant?.let {
+            startCalendar.time = it.dateOfContract
+            updateDateOfConclusion()
+            endCalendar.time = it.dateOfEnd
+            updateDateOfEnd()
+            sumEditText.setText(it.sum.toString())
+            it.zalog?.let{z->
+                zalogEditText.setText(z)
+            }
+        }
+
+        nextButton.text = "Изменить"
     }
 
     private fun setUpTimeToPayList(){
@@ -192,7 +212,8 @@ class NewContractFragment : Fragment() {
         }
 
         if(startDate != null && endDate != null && sum != null && payTime != null){
-            return Contract(0, 0, 0, sum, startDate, endDate, payTime, zalog, ContractStatus.ACTIVE)
+            val id = contractWithTenant?.id ?: 0
+            return Contract(id, 0, 0, sum, startDate, endDate, payTime, zalog, ContractStatus.ACTIVE)
         }
 
         return null

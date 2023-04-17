@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.navigation.fragment.findNavController
 import com.example.tenant.R
+import com.example.tenant.data.model.ContractWithTenant
 import com.example.tenant.data.model.Tenant
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
@@ -28,6 +29,7 @@ class ArendatorFragment : Fragment() {
     private lateinit var passportInputLayout: TextInputLayout
     private lateinit var lastInputLayout: TextInputLayout
     private lateinit var phoneNumberInputLayout: TextInputLayout
+    private var contractWithTenant: ContractWithTenant? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +50,8 @@ class ArendatorFragment : Fragment() {
                 findNavController().navigate(R.id.action_arendatorFragment_to_newContractFragment, bundle)
             }
         }
+
+        setTenantData()
     }
 
     private fun initViews(view: View){
@@ -61,6 +65,22 @@ class ArendatorFragment : Fragment() {
         passportInputLayout = view.findViewById(R.id.passportNumberEditTextLayout)
         lastInputLayout = view.findViewById(R.id.lastNameEditTextLayout)
         phoneNumberInputLayout = view.findViewById(R.id.phoneNumberEditTextLayout)
+    }
+
+    private fun setTenantData(){
+        contractWithTenant = (activity as NewContractActivity).contractWithTenant
+
+        contractWithTenant?.let {
+            it.dateOfBirth?.let { date->
+                calendar.time = date
+                updateLabel()
+            }
+
+            nameEditText.setText(it.firstName)
+            lastNameEditText.setText(it.lastName)
+            passportEditText.setText(it.passportNumber)
+            phoneNumberEditText.setText(it.phoneNumber)
+        }
     }
 
     private fun setDateOnClickListener(){
@@ -133,7 +153,8 @@ class ArendatorFragment : Fragment() {
         }
 
         if(phoneNumber.isNotEmpty() && passport.isNotEmpty() && lastName.isNotEmpty() && name.isNotEmpty()){
-            return Tenant(0, name, lastName, date, passport, phoneNumber)
+            val id = contractWithTenant?.id ?: 0
+            return Tenant(id, name, lastName, date, passport, phoneNumber)
         }
 
         return null

@@ -21,4 +21,4 @@ data class ContractWithTenant(
     val dateOfBirth: Date?,
     val passportNumber: String,
     var phoneNumber: String
-)
+): java.io.Serializable

@@ -46,6 +46,7 @@ class ArendaObjectFragment : Fragment() {
             val intent = Intent(activity, NewContractActivity::class.java)
             (activity as ChosenObjectActivity).objectAndCategory?.let {
                 intent.putExtra("object", it)
+                intent.putExtra("con_with", contractWithTenant)
             }
             startActivity(intent)
         }
@@ -84,7 +85,8 @@ class ArendaObjectFragment : Fragment() {
                         dateOfEndConclusionTextView.text = reformat(it.dateOfEnd)
                         sumTextView.text = it.sum.toString()
                         payTimeTextView.text = payTimeReformat(it.timeOfPay)
-                        zalogTextView.text = it.zalog.toString()
+                        zalogTextView.text = (it.zalog ?: "нет").toString()
+                        addContractButton.setImageResource(R.drawable.ic_edit)
                     }
                 }
             }
