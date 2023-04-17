@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Exploitation
 import com.example.tenant.ui.model.ChosenActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 class ExplotationListFragment : Fragment() {
     private lateinit var addExploitationButton: FloatingActionButton
@@ -45,6 +47,7 @@ class ExplotationListFragment : Fragment() {
             startActivity(intent)
         }
 
+        deleteExploitation()
     }
 
     override fun onStart() {
@@ -53,6 +56,7 @@ class ExplotationListFragment : Fragment() {
             viewModel.getAllExploitationByObjectId(it)
         }
     }
+
 
     private fun setUpRecyclerView(){
         exploitationAdapter = ExploitationListAdapter()
@@ -78,5 +82,37 @@ class ExplotationListFragment : Fragment() {
                 exploitationAdapter.exploitationList.submitList(list)
             }
         })
+    }
+
+    private fun deleteExploitation(){
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val exploitation = exploitationAdapter.exploitationList.currentList[position]
+                viewModel.deleteExploitation(exploitation)
+                Snackbar.make(view!!, "Эксплуатация удалена", Snackbar.LENGTH_LONG).apply {
+                    setAction("Отменить"){
+                        viewModel.addExploitation(exploitation)
+                        id?.let {
+                            viewModel.getAllExploitationByObjectId(it)
+                        }
+                    }
+                    show()
+                }
+            }
+        }
+
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(exploitationsRecyclerView)
     }
 }

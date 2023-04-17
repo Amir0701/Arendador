@@ -9,6 +9,7 @@ import com.example.tenant.data.model.Exploitation
 import com.example.tenant.data.repository.ContractRepository
 import com.example.tenant.data.repository.ExploitationRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ChosenActivityViewModel(val app: App,
@@ -26,5 +27,13 @@ class ChosenActivityViewModel(val app: App,
     fun getContractWithTenantByObjectId(objectId: Int) = viewModelScope.launch(Dispatchers.IO) {
         val contractWithTenant = contractRepository.getContractWithTenantByObjectId(objectId)
         this@ChosenActivityViewModel.contractWithTenant.postValue(contractWithTenant)
+    }
+
+    fun deleteExploitation(exploitation: Exploitation) = viewModelScope.launch(Dispatchers.IO) {
+        exploitationRepository.deleteExploitation(exploitation)
+    }
+
+    fun addExploitation(exploitation: Exploitation) = viewModelScope.launch(Dispatchers.IO){
+        exploitationRepository.addExploitation(exploitation)
     }
 }
