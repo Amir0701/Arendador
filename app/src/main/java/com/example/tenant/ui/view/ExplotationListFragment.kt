@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
+import com.example.tenant.data.model.Exploitation
 import com.example.tenant.ui.model.ChosenActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -19,6 +20,7 @@ class ExplotationListFragment : Fragment() {
     private lateinit var viewModel: ChosenActivityViewModel
     private lateinit var exploitationsRecyclerView: RecyclerView
     private lateinit var exploitationAdapter: ExploitationListAdapter
+    private var id: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +37,7 @@ class ExplotationListFragment : Fragment() {
         exploitationsRecyclerView = view.findViewById(R.id.exploitationRecyclerView)
         setUpRecyclerView()
         observeExploitations()
-        val id = (activity as ChosenObjectActivity).objectAndCategory?.id
+        id = (activity as ChosenObjectActivity).objectAndCategory?.id
 
         addExploitationButton.setOnClickListener {
             val intent = Intent(activity, NewExploitationActivity::class.java)
@@ -43,23 +45,37 @@ class ExplotationListFragment : Fragment() {
             startActivity(intent)
         }
 
-        if(id != null)
-            viewModel.getAllExploitationByObjectId(id)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        id?.let {
+            viewModel.getAllExploitationByObjectId(it)
+        }
     }
 
     private fun setUpRecyclerView(){
         exploitationAdapter = ExploitationListAdapter()
         exploitationsRecyclerView.adapter = exploitationAdapter
         exploitationsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        exploitationAdapter.setOnItemClickListener(object : ExploitationListAdapter.OnItemClickListener{
+            override fun onItemClick(exploitation: Exploitation) {
+                val intent = Intent(activity, NewExploitationActivity::class.java)
+                id?.let {
+                    intent.putExtra("obj_id", id)
+                }
+                val bundle = Bundle()
+                bundle.putSerializable("expo", exploitation)
+                intent.putExtra("expo_bundle", bundle)
+                startActivity(intent)
+            }
+        })
     }
 
     private fun observeExploitations(){
         viewModel.exploitations.observe(viewLifecycleOwner, Observer {
             it?.let {list->
                 exploitationAdapter.exploitationList.submitList(list)
-                if(list.size > 0){
-                    Log.i("exploitation", list[0].name)
-                }
             }
         })
     }
