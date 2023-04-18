@@ -20,7 +20,13 @@ class DateChangeReceiver: BroadcastReceiver() {
                 .setInitialDelay(10, TimeUnit.SECONDS)
                 .build()
 
-            p0?.let { WorkManager.getInstance(it).enqueue(myWorkRequest) }
+            //val smsWorkRequest = OneTimeWorkRequestBuilder<SmsWork>()
+              //  .addTag("sms")
+                //.setInitialDelay(10, TimeUnit.SECONDS)
+                //.build()
+
+            
+            p0?.let { WorkManager.getInstance(it).beginWith(myWorkRequest).enqueue() }
         }
     }
 }
