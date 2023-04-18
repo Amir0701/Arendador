@@ -114,7 +114,7 @@ class NewObjectFragment : Fragment() {
             null
         }
 
-        val idCat:Int? = if(categoryList.text.toString() != "Вид объекта"){
+        val idCat:Int? = if(categoryList.text.toString().isNotEmpty()){
             categoryInputLayout.helperText = ""
             var id = 0
             mainActivityViewModel.categoryLiveData.value?.let { list->
