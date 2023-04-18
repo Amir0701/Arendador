@@ -65,4 +65,6 @@ interface Dao {
     @Query("UPDATE obbject SET status = :objectStatus WHERE id = :id")
     suspend fun updateObjectStatus(id: Int, objectStatus: ObjectStatus)
 
+    @Query("SELECT * FROM contract")
+    suspend fun getAllContracts(): List<Contract>
 }

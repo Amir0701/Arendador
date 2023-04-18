@@ -7,46 +7,75 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.room.Room
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.tenant.R
 import com.example.tenant.data.AppDatabase
 import com.example.tenant.data.model.Category
+import com.example.tenant.data.model.ContractStatus
+import com.example.tenant.data.model.PayTime
 import com.example.tenant.data.repository.TenantRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.util.Calendar
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class SendPayNotificationWork constructor(val appContext: Context, params: WorkerParameters): Worker(appContext, params) {
-    override fun doWork(): Result {
+class SendPayNotificationWork constructor(val appContext: Context, params: WorkerParameters): CoroutineWorker(appContext, params) {
+    override suspend fun doWork(): Result {
         try {
-            val notificationChannel = NotificationChannel("notif", "notif", NotificationManager.IMPORTANCE_DEFAULT)
-            val notificationManager = appContext.getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(notificationChannel)
-
             val db = Room.databaseBuilder(
                 applicationContext,
                 AppDatabase::class.java, "TenantDB"
             ).build()
 
             val dao = db.getDao()
-            val notificationCompatBuilder: NotificationCompat.Builder =
-                NotificationCompat.Builder(appContext, "notif")
-            notificationCompatBuilder.setContentTitle("Time to pay")
-            notificationCompatBuilder.setContentText("You need to pay for rent")
-            notificationCompatBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
-            notificationCompatBuilder.setAutoCancel(true)
-            val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(appContext)
-            notificationManagerCompat.notify(1, notificationCompatBuilder.build())
 
+            val calendar = Calendar.getInstance()
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+            val contracts = dao.getAllContracts()
+            contracts.forEach {contracts ->
+                Log.i("contract", contracts.id.toString())
+                if(contracts.status == ContractStatus.ACTIVE){
+                    val date = contracts.dateOfContract
+                    val dayC = date.day
+                    Log.i("day", dayC.toString())
+                    Log.i("day", day.toString())
+                    Log.i("timeOfPay", contracts.timeOfPay.toString())
+                    val obbject = dao.getObjectById(contracts.objectId)
+                    if(PayTime.MONTH == contracts.timeOfPay && day == dayC){
+                        Log.i("notif", "send")
+                        sendNotification(appContext, obbject.name)
+                    }
+                    else if (PayTime.DAY == contracts.timeOfPay){
+                        sendNotification(appContext, obbject.name)
+                    }
+                    else if(PayTime.HALF_MONTH == contracts.timeOfPay && ((dayC + 15) % 30) == day){
+                        sendNotification(appContext, obbject.name)
+                    }
+                }
+            }
         }
         catch (ex: Exception){
             return Result.failure()
         }
 
         return Result.success()
+    }
+
+    private fun sendNotification(appContext: Context, objectName: String){
+        val notificationChannel = NotificationChannel("notif", "notif", NotificationManager.IMPORTANCE_DEFAULT)
+        val notificationManager = appContext.getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(notificationChannel)
+
+        val notificationCompatBuilder: NotificationCompat.Builder =
+            NotificationCompat.Builder(appContext, "notif")
+        notificationCompatBuilder.setContentTitle("День оплаты")
+        notificationCompatBuilder.setContentText("Сегодня день оплаты за недвижимость $objectName")
+        notificationCompatBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
+        notificationCompatBuilder.setAutoCancel(true)
+        val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(appContext)
+        notificationManagerCompat.notify(1, notificationCompatBuilder.build())
     }
 }
