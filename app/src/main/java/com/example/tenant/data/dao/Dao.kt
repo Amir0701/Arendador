@@ -59,4 +59,6 @@ interface Dao {
     @Query("DELETE FROM exploitation WHERE exploitation.object_id = :id")
     suspend fun deleteExploitationByObjectId(id: Int)
 
+    @Delete
+    suspend fun deleteExploitation(exploitation: Exploitation)
 }
