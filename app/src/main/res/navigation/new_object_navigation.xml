@@ -21,7 +21,9 @@
         tools:layout="@layout/fragment_new_object" >
         <action
             android:id="@+id/action_newObjectFragment2_to_objectsFragment"
-            app:destination="@id/objectsFragment" />
+            app:destination="@id/objectsFragment"
+            app:popUpTo="@id/objectsFragment"
+            app:popUpToInclusive="false" />
         <argument
             android:name="edit_object"
             app:argType="com.example.tenant.data.model.ObjectAndCategory"
