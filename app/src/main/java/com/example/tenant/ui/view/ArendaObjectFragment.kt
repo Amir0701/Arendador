@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.example.tenant.R
+import com.example.tenant.data.model.Contract
+import com.example.tenant.data.model.ContractStatus
 import com.example.tenant.data.model.ContractWithTenant
 import com.example.tenant.data.model.PayTime
 import com.example.tenant.ui.model.ChosenActivityViewModel
@@ -61,6 +63,8 @@ class ArendaObjectFragment : Fragment() {
                 it
             )
         }
+
+        setContractStatusChangeListener()
     }
 
     private fun initViews(view: View){
@@ -106,6 +110,29 @@ class ArendaObjectFragment : Fragment() {
             PayTime.MONTH -> "Раз в месяц"
             PayTime.HALF_MONTH -> "Два раза в месяц"
         }
+    }
+
+    private fun setContractStatusChangeListener(){
+        (activity as ChosenObjectActivity).setOnContractStatusChange(object : ChosenObjectActivity.OnContractStatusChange{
+            override fun onStatusChange() {
+                contractWithTenant?.let {
+                    val contract = Contract(
+                        it.id,
+                        it.objectId,
+                        it.tenantId,
+                        it.sum,
+                        it.dateOfContract,
+                        it.dateOfEnd,
+                        it.timeOfPay,
+                        it.zalog,
+                        ContractStatus.NO_ACTIVE
+                    )
+
+                    viewModel.upsertContract(contract)
+                }
+
+            }
+        })
     }
 
     companion object {

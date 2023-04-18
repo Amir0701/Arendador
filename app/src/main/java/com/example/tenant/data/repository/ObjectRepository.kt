@@ -2,6 +2,7 @@ package com.example.tenant.data.repository
 
 import com.example.tenant.data.dao.Dao
 import com.example.tenant.data.model.Obbject
+import com.example.tenant.data.model.ObjectStatus
 import javax.inject.Inject
 
 class ObjectRepository @Inject constructor(private val dao: Dao) {
@@ -14,4 +15,6 @@ class ObjectRepository @Inject constructor(private val dao: Dao) {
     suspend fun getObjectsWithCategory() = dao.getAllObjectsWithCategory()
 
     suspend fun deleteObject(id: Int): Int = dao.deleteObject(id)
+
+    suspend fun updateStatusObject(id: Int, objectStatus: ObjectStatus) = dao.updateObjectStatus(id, objectStatus)
 }

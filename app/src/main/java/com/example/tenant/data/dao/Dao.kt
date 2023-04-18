@@ -61,4 +61,8 @@ interface Dao {
 
     @Delete
     suspend fun deleteExploitation(exploitation: Exploitation)
+
+    @Query("UPDATE obbject SET status = :objectStatus WHERE id = :id")
+    suspend fun updateObjectStatus(id: Int, objectStatus: ObjectStatus)
+
 }
