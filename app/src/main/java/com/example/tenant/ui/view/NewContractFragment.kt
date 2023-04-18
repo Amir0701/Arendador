@@ -198,7 +198,7 @@ class NewContractFragment : Fragment() {
             null
         }
 
-        val payTime: PayTime? = if(timeToPay.text.toString() != "Время оплаты"){
+        val payTime: PayTime? = if(timeToPay.text.toString().isNotEmpty()){
             val pay = when(timeToPay.text.toString()){
                 "Каждый день" -> PayTime.DAY
                 "Раз в месяц" -> PayTime.MONTH
