@@ -17,6 +17,8 @@ import com.example.tenant.data.model.ContractStatus
 import com.example.tenant.data.model.PayTime
 import com.example.tenant.data.repository.TenantRepository
 import kotlinx.coroutines.*
+import java.sql.Timestamp
+import java.time.temporal.TemporalField
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -39,7 +41,9 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
                 Log.i("contract", contracts.id.toString())
                 if(contracts.status == ContractStatus.ACTIVE){
                     val date = contracts.dateOfContract
-                    val dayC = date.day
+                    val c = Calendar.getInstance()
+                    c.time = date
+                    val dayC = c.get(Calendar.DAY_OF_MONTH)
                     Log.i("day", dayC.toString())
                     Log.i("day", day.toString())
                     Log.i("timeOfPay", contracts.timeOfPay.toString())
