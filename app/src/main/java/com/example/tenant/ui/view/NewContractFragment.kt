@@ -101,9 +101,9 @@ class NewContractFragment : Fragment() {
             it.zalog?.let{z->
                 zalogEditText.setText(z)
             }
+            nextButton.text = "Изменить"
         }
 
-        nextButton.text = "Изменить"
     }
 
     private fun setUpTimeToPayList(){
