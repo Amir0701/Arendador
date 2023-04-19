@@ -30,7 +30,18 @@ class DateChangeReceiver: BroadcastReceiver() {
                 .setInitialDelay(10, TimeUnit.SECONDS)
                 .build()
 
-            p0?.let { WorkManager.getInstance(it).beginWith(myWorkRequest).then(contractEndWorkRequest).enqueue() }
+            val exploitationWorkRequest = OneTimeWorkRequestBuilder<ExploitationNotificationWork>()
+                .addTag("exploitation_start")
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .build()
+
+            p0?.let {
+                WorkManager.getInstance(it)
+                    .beginWith(myWorkRequest)
+                    .then(contractEndWorkRequest)
+                    .then(exploitationWorkRequest)
+                    .enqueue()
+            }
         }
     }
 }

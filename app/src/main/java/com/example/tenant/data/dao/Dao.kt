@@ -67,4 +67,7 @@ interface Dao {
 
     @Query("SELECT * FROM contract")
     suspend fun getAllContracts(): List<Contract>
+
+    @Query("SELECT * FROM exploitation")
+    suspend fun getAllExploitation(): List<Exploitation>
 }
