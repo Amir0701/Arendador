@@ -82,15 +82,17 @@ class ArendaObjectFragment : Fragment() {
             con?.let {list ->
                 if(list.isNotEmpty()){
                     list[list.size - 1].let {
-                        contractWithTenant = it
-                        nameTextView.text = "${it.firstName} ${it.lastName}"
-                        phoneNumberTextView.text = it.phoneNumber
-                        dateOfConclusionTextView.text = reformat(it.dateOfContract)
-                        dateOfEndConclusionTextView.text = reformat(it.dateOfEnd)
-                        sumTextView.text = it.sum.toString()
-                        payTimeTextView.text = payTimeReformat(it.timeOfPay)
-                        zalogTextView.text = (it.zalog ?: "нет").toString()
-                        addContractButton.setImageResource(R.drawable.ic_edit)
+                        if(it.status == ContractStatus.ACTIVE){
+                            contractWithTenant = it
+                            nameTextView.text = "${it.firstName} ${it.lastName}"
+                            phoneNumberTextView.text = it.phoneNumber
+                            dateOfConclusionTextView.text = reformat(it.dateOfContract)
+                            dateOfEndConclusionTextView.text = reformat(it.dateOfEnd)
+                            sumTextView.text = it.sum.toString()
+                            payTimeTextView.text = payTimeReformat(it.timeOfPay)
+                            zalogTextView.text = (it.zalog ?: "нет").toString()
+                            addContractButton.setImageResource(R.drawable.ic_edit)
+                        }
                     }
                 }
             }
