@@ -30,4 +30,9 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+    <fragment
+        android:id="@+id/diagramFragment"
+        android:name="com.example.tenant.ui.view.DiagramFragment"
+        android:label="fragment_diagram"
+        tools:layout="@layout/fragment_diagram" />
 </navigation>
