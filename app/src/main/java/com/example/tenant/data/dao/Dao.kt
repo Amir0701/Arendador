@@ -70,4 +70,8 @@ interface Dao {
 
     @Query("SELECT * FROM exploitation")
     suspend fun getAllExploitation(): List<Exploitation>
+
+    @Transaction
+    @Query("SELECT * FROM Obbject")
+    suspend fun getObjectsWithHistoryPay(): List<ObjectWithHistoryPay>
 }

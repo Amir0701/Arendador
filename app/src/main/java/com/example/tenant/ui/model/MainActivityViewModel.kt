@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
+import com.example.tenant.data.model.ObjectWithHistoryPay
 import com.example.tenant.data.repository.CategoryRepository
 import com.example.tenant.data.repository.ContractRepository
 import com.example.tenant.data.repository.ExploitationRepository
 import com.example.tenant.data.repository.ObjectRepository
+import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class MainActivityViewModel(app: Application,
                             private val objectRepository: ObjectRepository,
@@ -25,6 +28,8 @@ class MainActivityViewModel(app: Application,
     val objectsLiveData = MutableLiveData<List<Obbject>>()
     val objectsWithCategory = MutableLiveData<List<ObjectAndCategory>>()
     val deletedObjectCount = MutableLiveData<Int?>()
+    private var objectsWithHistoryPay: List<ObjectWithHistoryPay>? = null
+    val pieData = MutableLiveData<List<PieEntry>>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
@@ -59,5 +64,26 @@ class MainActivityViewModel(app: Application,
         contractRepository.deleteContractByObjectId(id)
         exploitationRepository.deleteExploitationByObjectId(id)
         deletedObjectCount.postValue(count)
+    }
+
+    fun getHistoryPayByYear(year: Int) = viewModelScope.launch (Dispatchers.IO){
+        if(objectsWithHistoryPay == null)
+            objectsWithHistoryPay = objectRepository.getObjectsWithHistoryPay()
+        val data = mutableListOf<PieEntry>()
+        val calendar = Calendar.getInstance()
+
+        objectsWithHistoryPay?.forEach {
+            var sum = 0
+            it.historyPay.forEach { historyPay ->
+                calendar.time = historyPay.dateOfPay
+                val payYear = calendar.get(Calendar.YEAR)
+                if(payYear == year)
+                    sum += historyPay.sum
+            }
+
+            data.add(PieEntry(sum.toFloat(), it.obbject.name))
+        }
+
+        pieData.postValue(data)
     }
 }
