@@ -1,5 +1,6 @@
 package com.example.tenant.data
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -15,7 +16,7 @@ abstract class AppDatabase: RoomDatabase() {
 
     companion object{
         val Migration1to2 = Migration(1, 2){
-            it.execSQL("DROP TABLE Category; CREATE TABLE Category(id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL)")
+            it.execSQL("ALTER TABLE HistoryPay ADD contract_id INTEGER NOT NULL")
         }
     }
 

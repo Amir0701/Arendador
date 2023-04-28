@@ -7,4 +7,9 @@
         android:title="Закрыть договор"
         app:showAsAction="always"
         android:icon="@drawable/ic_close"/>
+
+    <item
+        android:id="@+id/payContract"
+        android:title="Закрыть оплату"
+        app:showAsAction="never" />
 </menu>

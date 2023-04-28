@@ -132,18 +132,7 @@ class ArendaObjectFragment : Fragment() {
 
                     viewModel.upsertContract(contract)
                 }
-
             }
         })
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ArendaObjectFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
     }
 }

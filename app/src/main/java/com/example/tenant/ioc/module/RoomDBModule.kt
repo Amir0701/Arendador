@@ -18,7 +18,9 @@ class RoomDBModule constructor(applicationContext: Context) {
         db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "TenantDB"
-        ).build()
+        )
+            .addMigrations(AppDatabase.Migration1to2)
+            .build()
     }
 
 

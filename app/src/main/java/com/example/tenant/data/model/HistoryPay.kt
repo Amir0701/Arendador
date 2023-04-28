@@ -12,6 +12,8 @@ data class HistoryPay(
     @ColumnInfo("object_id")
     val objectId: Int,
     var sum: Int,
+    @ColumnInfo("contract_id")
+    val contractId: Int,
     @ColumnInfo("date_of_pay")
     val dateOfPay: Date
 )
