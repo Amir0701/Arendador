@@ -74,4 +74,7 @@ interface Dao {
     @Transaction
     @Query("SELECT * FROM Obbject")
     suspend fun getObjectsWithHistoryPay(): List<ObjectWithHistoryPay>
+
+    @Query("SELECT DISTINCT strftime('%Y', date_of_pay) FROM HistoryPay")
+    suspend fun getDistinctYears(): List<Int>
 }

@@ -8,10 +8,7 @@ import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectWithHistoryPay
-import com.example.tenant.data.repository.CategoryRepository
-import com.example.tenant.data.repository.ContractRepository
-import com.example.tenant.data.repository.ExploitationRepository
-import com.example.tenant.data.repository.ObjectRepository
+import com.example.tenant.data.repository.*
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +18,8 @@ class MainActivityViewModel(app: Application,
                             private val objectRepository: ObjectRepository,
                             private val categoryRepository: CategoryRepository,
                             private val contractRepository: ContractRepository,
-                            private val exploitationRepository: ExploitationRepository): AndroidViewModel(app) {
+                            private val exploitationRepository: ExploitationRepository,
+                            private val historyPayRepository: HistoryPayRepository): AndroidViewModel(app) {
     val objectIdLiveDate = MutableLiveData<Int?>()
     val objectLiveData = MutableLiveData<Obbject>()
     val categoryLiveData = MutableLiveData<List<Category>>()
@@ -30,6 +28,7 @@ class MainActivityViewModel(app: Application,
     val deletedObjectCount = MutableLiveData<Int?>()
     private var objectsWithHistoryPay: List<ObjectWithHistoryPay>? = null
     val pieData = MutableLiveData<List<PieEntry>>()
+    val years = MutableLiveData<List<Int>>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
@@ -85,5 +84,9 @@ class MainActivityViewModel(app: Application,
         }
 
         pieData.postValue(data)
+    }
+
+    fun getDistinctYears() = viewModelScope.launch(Dispatchers.IO) {
+        years.postValue(historyPayRepository.getDistinctYears())
     }
 }

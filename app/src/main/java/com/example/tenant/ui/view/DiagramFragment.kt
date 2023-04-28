@@ -1,23 +1,30 @@
 package com.example.tenant.ui.view
 
+import android.R.attr.data
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.tenant.R
+import com.example.tenant.ui.model.MainActivityViewModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
+
 
 class DiagramFragment : Fragment() {
     private lateinit var pieChart: PieChart
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var yearSpinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +36,42 @@ class DiagramFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         pieChart = view.findViewById(R.id.piechart)
+        yearSpinner = view.findViewById(R.id.yearSpinner)
+        createDiagram()
+        observeYears()
 
+        mainActivityViewModel.getDistinctYears()
+    }
+
+    private fun observeYears(){
+        mainActivityViewModel.years.observe(viewLifecycleOwner, Observer {
+            it?.let {list->
+                if(list.isNotEmpty()){
+                    val adapter: ArrayAdapter<Int> =
+                        ArrayAdapter<Int>(requireContext(), android.R.layout.simple_spinner_item, list)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    yearSpinner.adapter = adapter
+
+                    var i = 0
+                    var pos = -1
+                    var max = 0
+                    list.forEach {year->
+                        if(year > max) {
+                            pos = i
+                            max = year
+                        }
+                        i++
+                    }
+
+                    yearSpinner.setSelection(pos)
+                }
+            }
+        })
+    }
+
+    private fun createDiagram(){
         pieChart.setUsePercentValues(true)
         pieChart.description.isEnabled = true
         pieChart.setExtraOffsets(5f, 10f, 5f, 5f)

@@ -41,13 +41,16 @@ class MainActivity: AppCompatActivity(){
     @Inject
     lateinit var exploitationRepository: ExploitationRepository
 
+    @Inject
+    lateinit var historyPayRepository: HistoryPayRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.title = "Objects"
         mainActivityComponent = (application as App).appComponent.getMainActivityComponent()
         mainActivityComponent.inject(this)
-        val factory = MainActivityViewModelFactory(application, objectRepository, categoryRepository, contractRepository, exploitationRepository)
+        val factory = MainActivityViewModelFactory(application, objectRepository, categoryRepository, contractRepository, exploitationRepository, historyPayRepository)
         mainActivityViewModel = ViewModelProvider(this, factory)[MainActivityViewModel::class.java]
         var res: List<Tenant>? = null
         CoroutineScope(Dispatchers.IO).launch {
