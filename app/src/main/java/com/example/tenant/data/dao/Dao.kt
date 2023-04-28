@@ -77,4 +77,10 @@ interface Dao {
 
     @Query("SELECT DISTINCT strftime('%Y', date_of_pay) FROM HistoryPay")
     suspend fun getDistinctYears(): List<Int>
+
+    @Query("SELECT * FROM HistoryPay WHERE object_id = :objectId AND contract_id = :contractId")
+    suspend fun getHistoryPayByObjectIdAndContractId(objectId: Int, contractId: Int): List<HistoryPay>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addHistoryPay(historyPay: HistoryPay)
 }

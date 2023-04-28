@@ -1,22 +1,26 @@
 package com.example.tenant.ui.view
 
 import android.content.Intent
+import android.icu.util.LocaleData
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.example.tenant.R
-import com.example.tenant.data.model.Contract
-import com.example.tenant.data.model.ContractStatus
-import com.example.tenant.data.model.ContractWithTenant
-import com.example.tenant.data.model.PayTime
+import com.example.tenant.data.model.*
 import com.example.tenant.ui.model.ChosenActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.time.temporal.Temporal
 import java.util.*
+import javax.xml.datatype.DatatypeConstants.MONTHS
 
 class ArendaObjectFragment : Fragment() {
     private lateinit var addContractButton: FloatingActionButton
@@ -30,6 +34,8 @@ class ArendaObjectFragment : Fragment() {
     private lateinit var viewModel: ChosenActivityViewModel
 
     private var contractWithTenant: ContractWithTenant? = null
+
+    private var historyPayList: List<HistoryPay>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +71,12 @@ class ArendaObjectFragment : Fragment() {
         }
 
         setContractStatusChangeListener()
+        observeHistoryPay()
+        (activity as ChosenObjectActivity).objectAndCategory?.id?.let {
+            viewModel.getHistoryPay(it, contractWithTenant?.id!!)
+        }
+
+        setContractPayListener()
     }
 
     private fun initViews(view: View){
@@ -133,6 +145,59 @@ class ArendaObjectFragment : Fragment() {
                     viewModel.upsertContract(contract)
                 }
             }
+        })
+    }
+
+    private fun setContractPayListener(){
+        (activity as ChosenObjectActivity).setOnPayContractListener(object : ChosenObjectActivity.OnPayContractListener{
+            override fun onPayContract() {
+                historyPayList?.let{historyPays ->  
+                    if(contractWithTenant?.status == ContractStatus.ACTIVE){
+                        val currentCalendar = Calendar.getInstance()
+                        val dateConclusionCalendar = Calendar.getInstance()
+                        dateConclusionCalendar.time = contractWithTenant?.dateOfContract!!
+
+                        val cur = reformat(currentCalendar.time)
+                        val conc = reformat(dateConclusionCalendar.time)
+                        val dateFormatInput = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                        val curParse = LocalDate.parse(cur, dateFormatInput)
+                        val concParse = LocalDate.parse(conc, dateFormatInput)
+
+
+                        val historyPay = HistoryPay(
+                            0,
+                            (activity as ChosenObjectActivity).objectAndCategory!!.id,
+                            contractWithTenant!!.sum,
+                            contractWithTenant!!.id,
+                            currentCalendar.time
+                        )
+
+                        if(contractWithTenant?.timeOfPay == PayTime.DAY){
+                            val days = ChronoUnit.DAYS.between(concParse, curParse)
+                            if(historyPays.size < days){
+                                viewModel.addHistoryPay(historyPay)
+                            }else{
+                                Toast.makeText(requireContext(), "За сегодня уже оплачено", Toast.LENGTH_LONG).show()
+                            }
+                        }
+
+                        if(contractWithTenant?.timeOfPay == PayTime.MONTH){
+                            val months = ChronoUnit.MONTHS.between(concParse, curParse)
+                            if(historyPays.size < months){
+                                viewModel.addHistoryPay(historyPay)
+                            }else{
+                                Toast.makeText(requireContext(), "За этот месяц уже оплачено", Toast.LENGTH_LONG)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun observeHistoryPay(){
+        viewModel.historyPay.observe(viewLifecycleOwner, Observer {
+            historyPayList = it
         })
     }
 }

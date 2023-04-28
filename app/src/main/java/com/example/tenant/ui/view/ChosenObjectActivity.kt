@@ -15,6 +15,7 @@ import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.data.repository.ContractRepository
 import com.example.tenant.data.repository.ExploitationRepository
+import com.example.tenant.data.repository.HistoryPayRepository
 import com.example.tenant.data.repository.ObjectRepository
 import com.example.tenant.ioc.component.ChosenActivityComponent
 import com.example.tenant.ui.model.ChosenActivityViewModel
@@ -40,6 +41,9 @@ class ChosenObjectActivity : AppCompatActivity() {
     @Inject
     lateinit var objectRepository: ObjectRepository
 
+    @Inject
+    lateinit var historyPayRepository: HistoryPayRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chosen_object)
@@ -49,7 +53,8 @@ class ChosenObjectActivity : AppCompatActivity() {
             (application as App),
             exploitationRepository,
             contractRepository,
-            objectRepository
+            objectRepository,
+            historyPayRepository
         )
 
         chosenActivityViewModel = ViewModelProvider(this, factory)[ChosenActivityViewModel::class.java]
@@ -85,6 +90,9 @@ class ChosenObjectActivity : AppCompatActivity() {
             R.id.closeContract -> {
                 createDialog()
             }
+            R.id.payContract -> {
+                onPayContractListener?.onPayContract()
+            }
         }
         return true
     }
@@ -113,5 +121,16 @@ class ChosenObjectActivity : AppCompatActivity() {
 
     fun setOnContractStatusChange(onContractStatusChange: OnContractStatusChange){
         this.onContractStatusChange = onContractStatusChange
+    }
+
+
+    interface OnPayContractListener{
+        fun onPayContract()
+    }
+
+    private var onPayContractListener: OnPayContractListener? = null
+
+    fun setOnPayContractListener(onPayContractListener: OnPayContractListener){
+        this.onPayContractListener = onPayContractListener
     }
 }
