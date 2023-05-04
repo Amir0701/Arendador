@@ -3,6 +3,7 @@ package com.example.tenant.ui.view
 import android.content.Intent
 import android.icu.util.LocaleData
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -72,9 +73,11 @@ class ArendaObjectFragment : Fragment() {
 
         setContractStatusChangeListener()
         observeHistoryPay()
-        (activity as ChosenObjectActivity).objectAndCategory?.id?.let {
-            viewModel.getHistoryPay(it, contractWithTenant?.id!!)
-        }
+//        (activity as ChosenObjectActivity).objectAndCategory?.id?.let {
+//            contractWithTenant?.id?.let {cId ->
+//                viewModel.getHistoryPay(it, cId)
+//            }
+//        }
 
         setContractPayListener()
     }
@@ -104,6 +107,10 @@ class ArendaObjectFragment : Fragment() {
                             payTimeTextView.text = payTimeReformat(it.timeOfPay)
                             zalogTextView.text = (it.zalog ?: "нет").toString()
                             addContractButton.setImageResource(R.drawable.ic_edit)
+
+                            (activity as ChosenObjectActivity).objectAndCategory?.id?.let {obj_id ->
+                                viewModel.getHistoryPay(obj_id, it.id)
+                            }
                         }
                     }
                 }
@@ -151,7 +158,7 @@ class ArendaObjectFragment : Fragment() {
     private fun setContractPayListener(){
         (activity as ChosenObjectActivity).setOnPayContractListener(object : ChosenObjectActivity.OnPayContractListener{
             override fun onPayContract() {
-                historyPayList?.let{historyPays ->  
+                historyPayList?.let{historyPays ->
                     if(contractWithTenant?.status == ContractStatus.ACTIVE){
                         val currentCalendar = Calendar.getInstance()
                         val dateConclusionCalendar = Calendar.getInstance()
@@ -186,10 +193,26 @@ class ArendaObjectFragment : Fragment() {
                             if(historyPays.size < months){
                                 viewModel.addHistoryPay(historyPay)
                             }else{
-                                Toast.makeText(requireContext(), "За этот месяц уже оплачено", Toast.LENGTH_LONG)
+                                Toast.makeText(requireContext(), "За этот месяц уже оплачено", Toast.LENGTH_LONG).show()
                             }
                         }
                     }
+
+                    return
+                }
+                if(contractWithTenant?.status == ContractStatus.ACTIVE){
+                    val currentCalendar = Calendar.getInstance()
+                    Log.i("click pay", "yes")
+                    val historyPay = HistoryPay(
+                        0,
+                        (activity as ChosenObjectActivity).objectAndCategory!!.id,
+                        contractWithTenant!!.sum,
+                        contractWithTenant!!.id,
+                        currentCalendar.time
+                    )
+
+                    viewModel.addHistoryPay(historyPay)
+                    Toast.makeText(requireContext(), "Оплата закрыта", Toast.LENGTH_LONG).show()
                 }
             }
         })
@@ -198,6 +221,8 @@ class ArendaObjectFragment : Fragment() {
     private fun observeHistoryPay(){
         viewModel.historyPay.observe(viewLifecycleOwner, Observer {
             historyPayList = it
+            Log.i("pay", it?.get(0)?.id.toString())
+            Log.i("pay", it?.get(0)?.dateOfPay.toString())
         })
     }
 }

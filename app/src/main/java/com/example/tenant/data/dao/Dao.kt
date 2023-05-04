@@ -2,6 +2,7 @@ package com.example.tenant.data.dao
 
 import androidx.room.*
 import com.example.tenant.data.model.*
+import java.util.*
 
 @androidx.room.Dao
 interface Dao {
@@ -75,8 +76,8 @@ interface Dao {
     @Query("SELECT * FROM Obbject")
     suspend fun getObjectsWithHistoryPay(): List<ObjectWithHistoryPay>
 
-    @Query("SELECT DISTINCT strftime('%Y', date_of_pay) FROM HistoryPay")
-    suspend fun getDistinctYears(): List<Int>
+    @Query("SELECT * FROM HistoryPay")
+    suspend fun getDistinctYears(): List<HistoryPay>
 
     @Query("SELECT * FROM HistoryPay WHERE object_id = :objectId AND contract_id = :contractId")
     suspend fun getHistoryPayByObjectIdAndContractId(objectId: Int, contractId: Int): List<HistoryPay>

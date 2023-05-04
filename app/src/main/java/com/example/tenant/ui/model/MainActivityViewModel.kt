@@ -1,6 +1,7 @@
 package com.example.tenant.ui.model
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -87,6 +88,19 @@ class MainActivityViewModel(app: Application,
     }
 
     fun getDistinctYears() = viewModelScope.launch(Dispatchers.IO) {
-        years.postValue(historyPayRepository.getDistinctYears())
+        val dates = historyPayRepository.getDistinctYears()
+        Log.i( "yeear", dates.size.toString())
+        val set = mutableSetOf<Int>()
+        val calendar = Calendar.getInstance()
+
+        for(el in dates){
+            el?.let {
+                calendar.time = it.dateOfPay
+                val year = calendar.get(Calendar.YEAR)
+                set.add(year)
+            }
+        }
+
+        years.postValue(set.toList())
     }
 }

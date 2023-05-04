@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
+import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
@@ -55,10 +56,10 @@ class ObjectsFragment : Fragment() {
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
         //mainActivityViewModel.getObject(1)
-        //mainActivityViewModel.addCategory(Category(0, "Квартира"))
-        //mainActivityViewModel.addCategory(Category(0, "Дача"))
-        //mainActivityViewModel.addCategory(Category(0, "Комната"))
-        //mainActivityViewModel.addCategory(Category(0, "Гараж"))
+//        mainActivityViewModel.addCategory(Category(0, "Квартира"))
+//        mainActivityViewModel.addCategory(Category(0, "Дача"))
+//        mainActivityViewModel.addCategory(Category(0, "Комната"))
+//        mainActivityViewModel.addCategory(Category(0, "Гараж"))
         //mainActivityViewModel.getAllObjects()
         mainActivityViewModel.getObjectsWithCategory()
         initRecycler()

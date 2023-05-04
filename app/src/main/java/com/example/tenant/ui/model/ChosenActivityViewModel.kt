@@ -1,5 +1,6 @@
 package com.example.tenant.ui.model
 
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -50,7 +51,8 @@ class ChosenActivityViewModel(val app: App,
 
     fun getHistoryPay(objectId: Int, contractId: Int) = viewModelScope.launch(Dispatchers.IO) {
         val res = historyPayRepository.getHistoryPayByObjectIdAndContractId(objectId, contractId)
-        historyPay.postValue(res)
+        this@ChosenActivityViewModel.historyPay.postValue(res)
+        Log.i("post hist", "yes")
     }
 
     fun addHistoryPay(historyPay: HistoryPay) = viewModelScope.launch(Dispatchers.IO) {

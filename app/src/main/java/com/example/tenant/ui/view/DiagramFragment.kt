@@ -49,23 +49,34 @@ class DiagramFragment : Fragment() {
         mainActivityViewModel.years.observe(viewLifecycleOwner, Observer {
             it?.let {list->
                 if(list.isNotEmpty()){
-                    val adapter: ArrayAdapter<Int> =
-                        ArrayAdapter<Int>(requireContext(), android.R.layout.simple_spinner_item, list)
+                    val listString = mutableListOf<String>()
+//                    for (el in list)
+//                        listString.add(el.toString())
+                    listString.add(list[0].toString())
+
+                    val adapter: ArrayAdapter<String> =
+                        ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, listString)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     yearSpinner.adapter = adapter
 
-                    var i = 0
                     var pos = -1
                     var max = 0
-                    list.forEach {year->
-                        if(year > max) {
-                            pos = i
-                            max = year
-                        }
-                        i++
-                    }
+//                    for((i, year) in list.withIndex()){
+//                        if(year > max) {
+//                            pos = i
+//                            max = year
+//                        }
+//                    }
 
-                    yearSpinner.setSelection(pos)
+//                    list.forEach {year->
+//                        if(year > max) {
+//                            pos = i
+//                            max = year
+//                        }
+//                        i++
+//                    }
+
+                    //yearSpinner.setSelection(pos)
                 }
             }
         })
