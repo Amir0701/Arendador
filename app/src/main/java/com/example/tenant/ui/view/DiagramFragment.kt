@@ -39,9 +39,8 @@ class DiagramFragment : Fragment() {
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         pieChart = view.findViewById(R.id.piechart)
         yearSpinner = view.findViewById(R.id.yearSpinner)
-        createDiagram()
         observeYears()
-
+        observePieData()
         mainActivityViewModel.getDistinctYears()
     }
 
@@ -50,9 +49,9 @@ class DiagramFragment : Fragment() {
             it?.let {list->
                 if(list.isNotEmpty()){
                     val listString = mutableListOf<String>()
-//                    for (el in list)
-//                        listString.add(el.toString())
-                    listString.add(list[0].toString())
+                    for (el in list)
+                        listString.add(el.toString())
+                    //listString.add(list[0].toString())
 
                     val adapter: ArrayAdapter<String> =
                         ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, listString)
@@ -61,12 +60,12 @@ class DiagramFragment : Fragment() {
 
                     var pos = -1
                     var max = 0
-//                    for((i, year) in list.withIndex()){
-//                        if(year > max) {
-//                            pos = i
-//                            max = year
-//                        }
-//                    }
+                    for((i, year) in list.withIndex()){
+                        if(year > max) {
+                            pos = i
+                            max = year
+                        }
+                    }
 
 //                    list.forEach {year->
 //                        if(year > max) {
@@ -76,13 +75,15 @@ class DiagramFragment : Fragment() {
 //                        i++
 //                    }
 
-                    //yearSpinner.setSelection(pos)
+                    yearSpinner.setSelection(pos)
+
+                    mainActivityViewModel.getHistoryPayByYear(list[pos])
                 }
             }
         })
     }
 
-    private fun createDiagram(){
+    private fun createDiagram(list: List<PieEntry>){
         pieChart.setUsePercentValues(true)
         pieChart.description.isEnabled = true
         pieChart.setExtraOffsets(5f, 10f, 5f, 5f)
@@ -92,20 +93,25 @@ class DiagramFragment : Fragment() {
         pieChart.setHoleColor(Color.BLACK)
         pieChart.transparentCircleRadius = 45f
 
-        val values = mutableListOf<PieEntry>()
-        values.add(PieEntry(200000f, "Двухкомнатная квартира на Пирогова"))
-        values.add(PieEntry(250000f, "Дача"))
-        values.add(PieEntry(500000f, "Трехкомнатная квартира на Пушкина"))
-        values.add(PieEntry(302000f, "Трехкомнатная квартира на Лещина"))
+//        val values = mutableListOf<PieEntry>()
+//        values.add(PieEntry(200000f, "Двухкомнатная квартира на Пирогова"))
+//        values.add(PieEntry(250000f, "Дача"))
+//        values.add(PieEntry(500000f, "Трехкомнатная квартира на Пушкина"))
+//        values.add(PieEntry(302000f, "Трехкомнатная квартира на Лещина"))
+
+        var sum = 0f
+        list.forEach { pieEntry ->
+            sum += pieEntry.value
+        }
         val description = Description()
-        description.text = "Общая сумма доходов 950000"
+        description.text = "Общая сумма доходов ${sum.toLong()}"
         description.textSize = 12f
         pieChart.description = description
         description.textColor = Color.WHITE
 
         pieChart.animateY(1000, Easing.EaseInOutCubic)
 
-        val pieDataSet = PieDataSet(values, "Объекты")
+        val pieDataSet = PieDataSet(list, "Объекты")
         pieDataSet.sliceSpace = 3f
         pieDataSet.selectionShift = 5f
         //pieDataSet.colors = ColorTemplate.JOYFUL_COLORS
@@ -123,5 +129,13 @@ class DiagramFragment : Fragment() {
         pieChart.setEntryLabelColor(Color.RED)
         pieChart.setCenterTextColor(Color.WHITE)
         pieChart.setDrawEntryLabels(false)
+    }
+
+    private fun observePieData(){
+        mainActivityViewModel.pieData.observe(viewLifecycleOwner, Observer {
+            it?.let {list ->
+                createDiagram(list)
+            }
+        })
     }
 }

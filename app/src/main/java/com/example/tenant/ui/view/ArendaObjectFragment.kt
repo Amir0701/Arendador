@@ -221,8 +221,6 @@ class ArendaObjectFragment : Fragment() {
     private fun observeHistoryPay(){
         viewModel.historyPay.observe(viewLifecycleOwner, Observer {
             historyPayList = it
-            Log.i("pay", it?.get(0)?.id.toString())
-            Log.i("pay", it?.get(0)?.dateOfPay.toString())
         })
     }
 }
