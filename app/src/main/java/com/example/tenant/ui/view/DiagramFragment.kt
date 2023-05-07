@@ -1,6 +1,5 @@
 package com.example.tenant.ui.view
 
-import android.R.attr.data
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.tenant.R
@@ -28,6 +26,7 @@ class DiagramFragment : Fragment() {
     private lateinit var mainActivityViewModel: MainActivityViewModel
     private lateinit var yearSpinner: Spinner
     private lateinit var categorySpinner: Spinner
+    private lateinit var exploitationPieChart: PieChart
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,13 +40,18 @@ class DiagramFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         pieChart = view.findViewById(R.id.piechart)
+        exploitationPieChart = view.findViewById(R.id.exploitationPieChart)
         yearSpinner = view.findViewById(R.id.yearSpinner)
         categorySpinner = view.findViewById(R.id.categorySpinner)
+
         observeYears()
         observePieData()
         observeCategory()
+        observeExploitationPieData()
+
         setYearSpinnerClickListener()
         setCategorySpinnerClickListener()
+
         mainActivityViewModel.getDistinctYears()
         mainActivityViewModel.getAllCategories()
     }
@@ -76,7 +80,8 @@ class DiagramFragment : Fragment() {
 
                     yearSpinner.setSelection(pos)
 
-                    mainActivityViewModel.getHistoryPayByYear(list[pos], -1)
+                    mainActivityViewModel.getHistoryPayByYearAndCategory(list[pos], -1)
+                    mainActivityViewModel.getExploitationsByYearAndCategory(list[pos], -1)
                 }
             }
         })
@@ -112,8 +117,10 @@ class DiagramFragment : Fragment() {
         if(mainActivityViewModel.categoryLiveData.value?.size != position){
             id = position + 1
         }
+
         val year = (yearSpinner.getItemAtPosition(yearSpinner.selectedItemPosition) as String).toInt()
-        mainActivityViewModel.getHistoryPayByYear(year, id)
+        mainActivityViewModel.getHistoryPayByYearAndCategory(year, id)
+        mainActivityViewModel.getExploitationsByYearAndCategory(year, id)
     }
 
     private fun createDiagram(list: List<PieEntry>){
@@ -164,10 +171,66 @@ class DiagramFragment : Fragment() {
         pieChart.setDrawEntryLabels(false)
     }
 
+    private fun createExploitationDiagram(list: List<PieEntry>){
+        exploitationPieChart.setUsePercentValues(true)
+        exploitationPieChart.description.isEnabled = true
+        exploitationPieChart.setExtraOffsets(5f, 10f, 5f, 5f)
+
+        exploitationPieChart.dragDecelerationFrictionCoef = 0.99f
+        exploitationPieChart.isDrawHoleEnabled = true
+        exploitationPieChart.setHoleColor(Color.BLACK)
+        exploitationPieChart.transparentCircleRadius = 45f
+
+//        val values = mutableListOf<PieEntry>()
+//        values.add(PieEntry(200000f, "Двухкомнатная квартира на Пирогова"))
+//        values.add(PieEntry(250000f, "Дача"))
+//        values.add(PieEntry(500000f, "Трехкомнатная квартира на Пушкина"))
+//        values.add(PieEntry(302000f, "Трехкомнатная квартира на Лещина"))
+
+        var sum = 0f
+        list.forEach { pieEntry ->
+            sum += pieEntry.value
+        }
+        val description = Description()
+        description.text = "Общая сумма расходов на эксплуатацию ${sum.toLong()}"
+        description.textSize = 12f
+        exploitationPieChart.description = description
+        description.textColor = Color.WHITE
+
+        exploitationPieChart.animateY(1000, Easing.EaseInOutCubic)
+
+        val pieDataSet = PieDataSet(list, "Объекты")
+        pieDataSet.sliceSpace = 3f
+        pieDataSet.selectionShift = 5f
+        //pieDataSet.colors = ColorTemplate.JOYFUL_COLORS
+        //pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS)
+        //pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS, context)
+        ColorTemplate.JOYFUL_COLORS?.let {
+            pieDataSet.colors = it.toList()
+        }
+
+        val pieData = PieData(pieDataSet)
+        pieData.setValueTextSize(12f)
+        pieData.setValueTextColor(Color.BLACK)
+        //pieData.setValueFormatter()
+        exploitationPieChart.data = pieData
+        exploitationPieChart.setEntryLabelColor(Color.RED)
+        exploitationPieChart.setCenterTextColor(Color.WHITE)
+        exploitationPieChart.setDrawEntryLabels(false)
+    }
+
     private fun observePieData(){
         mainActivityViewModel.pieData.observe(viewLifecycleOwner, Observer {
             it?.let {list ->
                 createDiagram(list)
+            }
+        })
+    }
+
+    private fun observeExploitationPieData(){
+        mainActivityViewModel.exploitationsPieData.observe(viewLifecycleOwner, Observer {
+            it?.let { list->
+                createExploitationDiagram(list)
             }
         })
     }

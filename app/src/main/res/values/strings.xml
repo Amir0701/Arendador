@@ -17,6 +17,7 @@
 
     <string name="choose_category">Выберите вид</string>
     <string name="incomeTitle">Доход от объектов недвижимости</string>
+    <string name="expenses">Расходы на объекты недвижимости</string>
 
     <string-array name="pay_time_array">
         <item>Раз в месяц</item>

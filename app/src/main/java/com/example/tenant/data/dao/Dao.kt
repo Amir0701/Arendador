@@ -84,4 +84,8 @@ interface Dao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addHistoryPay(historyPay: HistoryPay)
+
+    @Transaction
+    @Query("SELECT * FROM Obbject")
+    suspend fun getObjectsWithExploitations(): List<ObjectWithExploitation>
 }

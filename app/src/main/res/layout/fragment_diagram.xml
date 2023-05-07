@@ -52,8 +52,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/incomePieChartTitle" />
 
+        <TextView
+            android:id="@+id/expensesPieChartTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:textSize="14sp"
+            android:text="@string/expenses"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/piechart"/>
+
         <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/exploitationPiechart"
+            android:id="@+id/exploitationPieChart"
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:layout_marginBottom="40dp"
@@ -61,7 +72,7 @@
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/piechart" />
+            app:layout_constraintTop_toBottomOf="@id/expensesPieChartTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
