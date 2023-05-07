@@ -25,6 +25,7 @@ class DiagramFragment : Fragment() {
     private lateinit var pieChart: PieChart
     private lateinit var mainActivityViewModel: MainActivityViewModel
     private lateinit var yearSpinner: Spinner
+    private lateinit var categorySpinner: Spinner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +40,12 @@ class DiagramFragment : Fragment() {
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         pieChart = view.findViewById(R.id.piechart)
         yearSpinner = view.findViewById(R.id.yearSpinner)
+        categorySpinner = view.findViewById(R.id.categorySpinner)
         observeYears()
         observePieData()
+        observeCategory()
         mainActivityViewModel.getDistinctYears()
+        mainActivityViewModel.getAllCategories()
     }
 
     private fun observeYears(){
@@ -51,7 +55,6 @@ class DiagramFragment : Fragment() {
                     val listString = mutableListOf<String>()
                     for (el in list)
                         listString.add(el.toString())
-                    //listString.add(list[0].toString())
 
                     val adapter: ArrayAdapter<String> =
                         ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, listString)
@@ -66,14 +69,6 @@ class DiagramFragment : Fragment() {
                             max = year
                         }
                     }
-
-//                    list.forEach {year->
-//                        if(year > max) {
-//                            pos = i
-//                            max = year
-//                        }
-//                        i++
-//                    }
 
                     yearSpinner.setSelection(pos)
 
@@ -135,6 +130,23 @@ class DiagramFragment : Fragment() {
         mainActivityViewModel.pieData.observe(viewLifecycleOwner, Observer {
             it?.let {list ->
                 createDiagram(list)
+            }
+        })
+    }
+
+    private fun observeCategory(){
+        mainActivityViewModel.categoryLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val listString = mutableListOf<String>()
+                for (elem in it)
+                    listString.add(elem.name)
+                listString.add("Все")
+                val adapter: ArrayAdapter<String> =
+                    ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, listString)
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                categorySpinner.adapter = adapter
+
+                categorySpinner.setSelection(listString.size - 1)
             }
         })
     }
