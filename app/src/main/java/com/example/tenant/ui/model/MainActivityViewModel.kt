@@ -66,7 +66,7 @@ class MainActivityViewModel(app: Application,
         deletedObjectCount.postValue(count)
     }
 
-    fun getHistoryPayByYear(year: Int) = viewModelScope.launch (Dispatchers.IO){
+    fun getHistoryPayByYear(year: Int, categoryId: Int) = viewModelScope.launch (Dispatchers.IO){
         if(objectsWithHistoryPay == null)
             objectsWithHistoryPay = objectRepository.getObjectsWithHistoryPay()
         val data = mutableListOf<PieEntry>()
@@ -74,13 +74,15 @@ class MainActivityViewModel(app: Application,
 
         objectsWithHistoryPay?.forEach {
             var sum = 0
-            it.historyPay.forEach { historyPay ->
-                calendar.time = historyPay.dateOfPay
-                val payYear = calendar.get(Calendar.YEAR)
-                if(payYear == year)
-                    sum += historyPay.sum
-            }
 
+            if(categoryId == -1 || it.obbject.categoryId == categoryId){
+                it.historyPay.forEach { historyPay ->
+                    calendar.time = historyPay.dateOfPay
+                    val payYear = calendar.get(Calendar.YEAR)
+                    if(payYear == year)
+                        sum += historyPay.sum
+                }
+            }
             data.add(PieEntry(sum.toFloat(), it.obbject.name))
         }
 

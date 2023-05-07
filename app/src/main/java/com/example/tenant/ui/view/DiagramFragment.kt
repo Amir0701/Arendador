@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.tenant.R
@@ -44,6 +46,8 @@ class DiagramFragment : Fragment() {
         observeYears()
         observePieData()
         observeCategory()
+        setYearSpinnerClickListener()
+        setCategorySpinnerClickListener()
         mainActivityViewModel.getDistinctYears()
         mainActivityViewModel.getAllCategories()
     }
@@ -72,10 +76,44 @@ class DiagramFragment : Fragment() {
 
                     yearSpinner.setSelection(pos)
 
-                    mainActivityViewModel.getHistoryPayByYear(list[pos])
+                    mainActivityViewModel.getHistoryPayByYear(list[pos], -1)
                 }
             }
         })
+    }
+
+    private fun setYearSpinnerClickListener(){
+        yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                onSpinnerItemSelected()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
+    }
+
+    private fun setCategorySpinnerClickListener(){
+        categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                onSpinnerItemSelected()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
+    }
+
+    private fun onSpinnerItemSelected(){
+        val position = categorySpinner.selectedItemPosition
+        var id = -1
+        if(mainActivityViewModel.categoryLiveData.value?.size != position){
+            id = position + 1
+        }
+        val year = (yearSpinner.getItemAtPosition(yearSpinner.selectedItemPosition) as String).toInt()
+        mainActivityViewModel.getHistoryPayByYear(year, id)
     }
 
     private fun createDiagram(list: List<PieEntry>){
