@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.tenant.R
@@ -15,10 +17,12 @@ import com.example.tenant.ui.model.MainActivityViewModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
@@ -152,7 +156,7 @@ class DiagramFragment : Fragment() {
 
         pieChart.animateY(1000, Easing.EaseInOutCubic)
 
-        val pieDataSet = PieDataSet(list, "Объекты")
+        val pieDataSet = PieDataSet(list, "")
         pieDataSet.sliceSpace = 3f
         pieDataSet.selectionShift = 5f
         //pieDataSet.colors = ColorTemplate.JOYFUL_COLORS
@@ -166,11 +170,13 @@ class DiagramFragment : Fragment() {
         pieData.setValueTextSize(12f)
         pieData.setValueTextColor(Color.BLACK)
         pieData.setValueFormatter(PercentFormatter(pieChart))
-        //pieData.setValueFormatter()
+        pieData.isHighlightEnabled = true
         pieChart.data = pieData
         pieChart.setEntryLabelColor(Color.RED)
         pieChart.setCenterTextColor(Color.WHITE)
         pieChart.setDrawEntryLabels(false)
+        pieChart.legend.textColor = Color.WHITE
+        pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
     }
 
     private fun createExploitationDiagram(list: List<PieEntry>){
@@ -201,12 +207,9 @@ class DiagramFragment : Fragment() {
 
         exploitationPieChart.animateY(1000, Easing.EaseInOutCubic)
 
-        val pieDataSet = PieDataSet(list, "Объекты")
+        val pieDataSet = PieDataSet(list, "")
         pieDataSet.sliceSpace = 3f
         pieDataSet.selectionShift = 5f
-        //pieDataSet.colors = ColorTemplate.JOYFUL_COLORS
-        //pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS)
-        //pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS, context)
         ColorTemplate.JOYFUL_COLORS?.let {
             pieDataSet.colors = it.toList()
         }
@@ -215,11 +218,12 @@ class DiagramFragment : Fragment() {
         pieData.setValueTextSize(12f)
         pieData.setValueTextColor(Color.BLACK)
         pieData.setValueFormatter(PercentFormatter(exploitationPieChart))
-        //pieData.setValueFormatter()
         exploitationPieChart.data = pieData
         exploitationPieChart.setEntryLabelColor(Color.RED)
         exploitationPieChart.setCenterTextColor(Color.WHITE)
         exploitationPieChart.setDrawEntryLabels(false)
+        exploitationPieChart.legend.textColor = Color.WHITE
+        exploitationPieChart.legend.isWordWrapEnabled = true
     }
 
     private fun observePieData(){
