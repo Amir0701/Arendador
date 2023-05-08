@@ -18,6 +18,7 @@ import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
@@ -164,6 +165,7 @@ class DiagramFragment : Fragment() {
         val pieData = PieData(pieDataSet)
         pieData.setValueTextSize(12f)
         pieData.setValueTextColor(Color.BLACK)
+        pieData.setValueFormatter(PercentFormatter(pieChart))
         //pieData.setValueFormatter()
         pieChart.data = pieData
         pieChart.setEntryLabelColor(Color.RED)
@@ -212,6 +214,7 @@ class DiagramFragment : Fragment() {
         val pieData = PieData(pieDataSet)
         pieData.setValueTextSize(12f)
         pieData.setValueTextColor(Color.BLACK)
+        pieData.setValueFormatter(PercentFormatter(exploitationPieChart))
         //pieData.setValueFormatter()
         exploitationPieChart.data = pieData
         exploitationPieChart.setEntryLabelColor(Color.RED)
