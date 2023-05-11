@@ -1,8 +1,10 @@
 package com.example.tenant.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -63,5 +65,14 @@ class MainActivity: AppCompatActivity(){
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
         val navController: NavController = this.findNavController(R.id.container)
         bottomNavigationView.setupWithNavController(navController)
+
+        if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
+            // Нет разрешения на использование NotificationListenerService
+            val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            startActivity(intent)
+        } else {
+            // Есть разрешение на использование NotificationListenerService
+        }
+
     }
 }
