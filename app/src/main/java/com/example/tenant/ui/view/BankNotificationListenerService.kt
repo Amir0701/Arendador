@@ -11,14 +11,13 @@ import com.example.tenant.data.model.HistoryPay
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.util.Calendar
 
 class BankNotificationListenerService: NotificationListenerService() {
     private val TAG = "notif"
+
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-
         // Обработка уведомления
         if(sbn.packageName.toString().equals("com.idamob.tinkoff.android", ignoreCase = true)){
             val packageName = sbn.packageName
@@ -43,8 +42,27 @@ class BankNotificationListenerService: NotificationListenerService() {
                     }
                 }
             }
-        }
+        }else if(sbn.packageName.toString().equals("ru.sberbankmobile", ignoreCase = true)){
+            val notificationTitle = sbn.notification?.extras?.getString(Notification.EXTRA_TITLE)
+            val notificationText = sbn.notification?.extras?.getString(Notification.EXTRA_TEXT)
 
+            if(notificationTitle?.trim() == "Зачислен перевод"){
+                notificationText?.let {text->
+                    val splitText = text.split(" ")
+                    val fullN = "${splitText[splitText.size - 3]}${splitText[splitText.size - 1][0]}"
+                    Log.i("notif name", fullN)
+                    Log.i("notif sber", splitText[5])
+                    val str = java.lang.StringBuilder()
+                    var i = 0
+                    while(splitText[5][i] != 'р'){
+                        str.append(splitText[5][i])
+                        i++
+                    }
+
+                    check(fullN.trim(), str.trim().toString().toInt())
+                }
+            }
+        }
     }
 
     private fun check(name: String, sum: Int){
@@ -65,9 +83,7 @@ class BankNotificationListenerService: NotificationListenerService() {
                     Log.i("notif", "${contract[contract.size - 1].firstName} ${contract[contract.size - 1].lastName}" )
                     val c = contract[contract.size - 1]
                     val fullName = c.firstName.trim() + c.lastName[0]
-                    Log.i("notif", name)
-                    Log.i("notif", fullName)
-                    if(fullName == name && sum == c.sum){
+                    if(fullName.equals(name, ignoreCase = true) && sum == c.sum){
                         Log.i("notif", "pay added")
                         val historyPay = HistoryPay(0, objId, sum, c.id, Calendar.getInstance().time)
                         dao.addHistoryPay(historyPay)
