@@ -70,6 +70,6 @@ class ContractEndNotificationWork(val appContext: Context, parameters: WorkerPar
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
         notificationCompatBuilder.setAutoCancel(true)
         val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(appContext)
-        notificationManagerCompat.notify(1, notificationCompatBuilder.build())
+        notificationManagerCompat.notify(3, notificationCompatBuilder.build())
     }
 }

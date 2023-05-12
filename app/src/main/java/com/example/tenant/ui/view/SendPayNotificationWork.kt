@@ -69,7 +69,7 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
     }
 
     private fun sendNotification(appContext: Context, objectName: String){
-        val notificationChannel = NotificationChannel("notif", "notif", NotificationManager.IMPORTANCE_DEFAULT)
+        val notificationChannel = NotificationChannel("notif", "notif", NotificationManager.IMPORTANCE_HIGH)
         val notificationManager = appContext.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(notificationChannel)
 
@@ -80,6 +80,6 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
         notificationCompatBuilder.setAutoCancel(true)
         val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(appContext)
-        notificationManagerCompat.notify(1, notificationCompatBuilder.build())
+        notificationManagerCompat.notify(2, notificationCompatBuilder.build())
     }
 }
