@@ -1,12 +1,16 @@
 package com.example.tenant.ui.view
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.NumberPicker.OnValueChangeListener
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.get
@@ -18,11 +22,13 @@ import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
 
 
@@ -177,6 +183,24 @@ class DiagramFragment : Fragment() {
         pieChart.setDrawEntryLabels(false)
         pieChart.legend.textColor = Color.WHITE
         pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
+        pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                val pieEntry = (e as PieEntry)
+                Log.i("value select", pieEntry.value.toString())
+                val dialog = AlertDialog.Builder(context)
+                    .setMessage("${pieEntry.value} рублей")
+                    .setTitle(pieEntry.label)
+                    .setPositiveButton("OK") { p0, p1 ->
+                        p0?.cancel()
+                    }
+                    .create()
+
+                dialog.show()
+            }
+
+            override fun onNothingSelected() {
+            }
+        })
     }
 
     private fun createExploitationDiagram(list: List<PieEntry>){
@@ -224,6 +248,25 @@ class DiagramFragment : Fragment() {
         exploitationPieChart.setDrawEntryLabels(false)
         exploitationPieChart.legend.textColor = Color.WHITE
         exploitationPieChart.legend.isWordWrapEnabled = true
+
+        exploitationPieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                val pieEntry = (e as PieEntry)
+                Log.i("value select", pieEntry.value.toString())
+                val dialog = AlertDialog.Builder(context)
+                    .setMessage("${pieEntry.value} рублей")
+                    .setTitle(pieEntry.label)
+                    .setPositiveButton("OK") { p0, p1 ->
+                        p0?.cancel()
+                    }
+                    .create()
+
+                dialog.show()
+            }
+
+            override fun onNothingSelected() {
+            }
+        })
     }
 
     private fun observePieData(){
