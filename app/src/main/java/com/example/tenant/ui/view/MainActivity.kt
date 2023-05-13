@@ -73,6 +73,5 @@ class MainActivity: AppCompatActivity(){
         } else {
             // Есть разрешение на использование NotificationListenerService
         }
-
     }
 }
