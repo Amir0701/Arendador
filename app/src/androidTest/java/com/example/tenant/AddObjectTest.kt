@@ -1,18 +1,20 @@
 package com.example.tenant
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.openLinkWithText
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.tenant.ui.view.MainActivity
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,8 +32,13 @@ class AddObjectTest {
         onView(withId(R.id.objectNameEditText))
             .perform(ViewActions.typeText("Flat on Baumana"))
 
-        onView(withId(R.id.categoryList))
-            .perform(click()).check(ViewAssertions.matches(withText("Квартира"))).perform(click())
+        onView(withId(R.id.categoryList)).perform(click())
+
+        onData(allOf(`is`(instanceOf(String::class.java)),
+            `is`("Квартира")))
+            .atPosition(0)
+            .inRoot(RootMatchers.isPlatformPopup())
+            .perform(click())
 
         onView(withId(R.id.squareEditText))
             .perform(ViewActions.typeText("65"))
