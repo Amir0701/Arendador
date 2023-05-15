@@ -1,9 +1,13 @@
 package com.example.tenant
 
+import android.view.View
 import android.widget.DatePicker
+import android.widget.TextView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.contrib.PickerActions.setDate
@@ -15,6 +19,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.tenant.ui.view.MainActivity
 import com.example.tenant.ui.view.ObjectsAdapter
+import junit.framework.Assert.assertEquals
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
@@ -67,5 +73,28 @@ class AddContractTest {
 
         onView(withId(R.id.nextButton)).perform(scrollTo(), click())
         pressBack()
+//        val statusText = onView(withId(R.id.objectsRecycler))
+//            .perform(RecyclerViewActions.actionOnItemAtPosition<ObjectsAdapter.ViewHolder>(2, check))
+//            getText(withId(R.id.cardObjectStatus))
+        //assertEquals("В аренде", statusText)
+    }
+
+    fun getText(matcher: Matcher<View>): String{
+        var text = ""
+        onView(matcher).perform(object: ViewAction{
+            override fun getDescription(): String {
+                return "getting text from TextView"
+            }
+
+            override fun getConstraints(): Matcher<View> {
+                return isAssignableFrom(TextView::class.java)
+            }
+
+            override fun perform(uiController: UiController?, view: View?) {
+                text = (view as TextView).text.toString()
+            }
+        })
+
+        return text
     }
 }
