@@ -15,5 +15,6 @@ data class HistoryPay(
     @ColumnInfo("contract_id")
     val contractId: Int,
     @ColumnInfo("date_of_pay")
-    val dateOfPay: Date
+    val dateOfPay: Date,
+    var overdue: Int = 0
 )

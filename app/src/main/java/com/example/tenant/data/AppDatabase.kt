@@ -9,14 +9,14 @@ import com.example.tenant.data.converter.Converter
 import com.example.tenant.data.dao.Dao
 import com.example.tenant.data.model.*
 
-@Database(entities = [Category::class, Contract::class, Exploitation::class, HistoryPay::class, Obbject::class, Tenant::class], version = 1)
+@Database(entities = [Category::class, Contract::class, Exploitation::class, HistoryPay::class, Obbject::class, Tenant::class], version = 3)
 @TypeConverters(Converter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun getDao(): Dao
 
     companion object{
-        val Migration1to2 = Migration(1, 2){
-            it.execSQL("ALTER TABLE HistoryPay ADD contract_id INTEGER NOT NULL")
+        val Migration1to2 = Migration(1, 3){
+            it.execSQL("ALTER TABLE HistoryPay ADD overdue INTEGER DEFAULT 0 NOT NULL")
         }
     }
 
