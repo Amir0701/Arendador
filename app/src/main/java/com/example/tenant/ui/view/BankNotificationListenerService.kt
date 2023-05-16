@@ -8,10 +8,15 @@ import androidx.room.Room
 import com.example.tenant.data.AppDatabase
 import com.example.tenant.data.model.ContractStatus
 import com.example.tenant.data.model.HistoryPay
+import com.example.tenant.data.model.PayTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 class BankNotificationListenerService: NotificationListenerService() {
     private val TAG = "notif"
@@ -85,11 +90,43 @@ class BankNotificationListenerService: NotificationListenerService() {
                     val fullName = c.firstName.trim() + c.lastName[0]
                     if(fullName.equals(name, ignoreCase = true) && sum == c.sum){
                         Log.i("notif", "pay added")
-                        val historyPay = HistoryPay(0, objId, sum, c.id, Calendar.getInstance().time)
+                        val hist = dao.getHistoryPayByObjectIdAndContractId(objId, contractId = contract[contract.size - 1].id)
+                        val currentCalendar = Calendar.getInstance()
+                        val cur = reformat(currentCalendar.time)
+                        val conc = reformat(contract[contract.size - 1].dateOfContract)
+                        val dateFormatInput = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+                        val curParse = LocalDate.parse(cur, dateFormatInput)
+                        val concParse = LocalDate.parse(conc, dateFormatInput)
+
+                        var overdue = 0
+                        if(contract[contract.size - 1].timeOfPay == PayTime.MONTH){
+                            val months = ChronoUnit.MONTHS.between(concParse, curParse)
+                            if(hist.size <= months){
+                                val cal = Calendar.getInstance()
+                                cal.time = contract[contract.size - 1].dateOfContract
+                                cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + hist.size)
+                                val refCal = reformat(cal.time)
+                                val calParse = LocalDate.parse(refCal, dateFormatInput)
+                                overdue = ChronoUnit.DAYS.between(calParse, curParse).toInt()
+                            }
+                        }
+
+                        if(contract[contract.size - 1].timeOfPay == PayTime.DAY){
+                            val days = ChronoUnit.DAYS.between(concParse, curParse)
+                            overdue = days.toInt() - hist.size
+                        }
+
+                        val historyPay = HistoryPay(0, objId, sum, c.id, Calendar.getInstance().time, overdue)
                         dao.addHistoryPay(historyPay)
                     }
                 }
             }
         }
+    }
+
+    private fun reformat(date: Date): String{
+        val format = "dd.MM.yyyy"
+        val simpleDateFormat = SimpleDateFormat(format, Locale.ENGLISH)
+        return simpleDateFormat.format(date)
     }
 }
