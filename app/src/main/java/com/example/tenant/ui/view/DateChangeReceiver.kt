@@ -20,10 +20,10 @@ class DateChangeReceiver: BroadcastReceiver() {
                 .setInitialDelay(10, TimeUnit.SECONDS)
                 .build()
 
-            //val smsWorkRequest = OneTimeWorkRequestBuilder<SmsWork>()
-              //  .addTag("sms")
-                //.setInitialDelay(10, TimeUnit.SECONDS)
-                //.build()
+            val smsWorkRequest = OneTimeWorkRequestBuilder<SmsWork>()
+                .addTag("sms")
+                .setInitialDelay(10, TimeUnit.SECONDS)
+                .build()
 
             val contractEndWorkRequest = OneTimeWorkRequestBuilder<ContractEndNotificationWork>()
                 .addTag("contract_end")
@@ -40,6 +40,7 @@ class DateChangeReceiver: BroadcastReceiver() {
                     .beginWith(myWorkRequest)
                     .then(contractEndWorkRequest)
                     .then(exploitationWorkRequest)
+                    .then(smsWorkRequest)
                     .enqueue()
             }
         }
