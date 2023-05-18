@@ -54,15 +54,13 @@ class ObjectsFragment : Fragment() {
         observeObjects()
         observeObjectsWithCategory()
         observeDeleted()
+        observeCategories()
         val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
         //mainActivityViewModel.addObject(objec1)
         //mainActivityViewModel.getObject(1)
-//        mainActivityViewModel.addCategory(Category(0, "Квартира"))
-//        mainActivityViewModel.addCategory(Category(0, "Дача"))
-//        mainActivityViewModel.addCategory(Category(0, "Комната"))
-//        mainActivityViewModel.addCategory(Category(0, "Гараж"))
         //mainActivityViewModel.getAllObjects()
         mainActivityViewModel.getObjectsWithCategory()
+        mainActivityViewModel.getAllCategories()
         initRecycler()
         setDeleteClickListener()
     }
@@ -139,6 +137,19 @@ class ObjectsFragment : Fragment() {
                     dialogInterface.cancel()
                 }
                 alertDialogBuilder.create().show()
+            }
+        })
+    }
+
+    private fun observeCategories(){
+        mainActivityViewModel.categoryLiveData.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if(it.isEmpty()){
+                    mainActivityViewModel.addCategory(Category(0, "Квартира"))
+                    mainActivityViewModel.addCategory(Category(0, "Дача"))
+                    mainActivityViewModel.addCategory(Category(0, "Комната"))
+                    mainActivityViewModel.addCategory(Category(0, "Гараж"))
+                }
             }
         })
     }

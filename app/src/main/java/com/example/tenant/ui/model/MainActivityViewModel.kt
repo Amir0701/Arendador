@@ -24,6 +24,7 @@ class MainActivityViewModel(app: Application,
     val objectsLiveData = MutableLiveData<List<Obbject>>()
     val objectsWithCategory = MutableLiveData<List<ObjectAndCategory>>()
     val deletedObjectCount = MutableLiveData<Int?>()
+
     private var objectsWithHistoryPay: List<ObjectWithHistoryPay>? = null
     val pieData = MutableLiveData<List<PieEntry>>()
     val years = MutableLiveData<List<Int>>()

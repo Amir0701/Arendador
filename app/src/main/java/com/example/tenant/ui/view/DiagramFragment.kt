@@ -129,9 +129,11 @@ class DiagramFragment : Fragment() {
             id = position + 1
         }
 
-        val year = (yearSpinner.getItemAtPosition(yearSpinner.selectedItemPosition) as String).toInt()
-        mainActivityViewModel.getHistoryPayByYearAndCategory(year, id)
-        mainActivityViewModel.getExploitationsByYearAndCategory(year, id)
+        yearSpinner.getItemAtPosition(yearSpinner.selectedItemPosition)?.let {
+            val year = (it as String).toInt()
+            mainActivityViewModel.getHistoryPayByYearAndCategory(year, id)
+            mainActivityViewModel.getExploitationsByYearAndCategory(year, id)
+        }
     }
 
     private fun createDiagram(list: List<PieEntry>){
