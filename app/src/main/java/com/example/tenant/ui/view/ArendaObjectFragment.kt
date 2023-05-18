@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.example.tenant.R
 import com.example.tenant.data.model.*
 import com.example.tenant.ui.model.ChosenActivityViewModel
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -24,7 +25,7 @@ import java.util.*
 import javax.xml.datatype.DatatypeConstants.MONTHS
 
 class ArendaObjectFragment : Fragment() {
-    private lateinit var addContractButton: FloatingActionButton
+    private lateinit var addContractButton: ExtendedFloatingActionButton
     private lateinit var nameTextView: TextView
     private lateinit var phoneNumberTextView: TextView
     private lateinit var dateOfConclusionTextView: TextView
@@ -106,8 +107,8 @@ class ArendaObjectFragment : Fragment() {
                             sumTextView.text = it.sum.toString()
                             payTimeTextView.text = payTimeReformat(it.timeOfPay)
                             zalogTextView.text = (it.zalog ?: "нет").toString()
-                            addContractButton.setImageResource(R.drawable.ic_edit)
-
+                            addContractButton.setIconResource(R.drawable.ic_edit)
+                            addContractButton.text = "Редактировать"
                             (activity as ChosenObjectActivity).objectAndCategory?.id?.let {obj_id ->
                                 viewModel.getHistoryPay(obj_id, it.id)
                             }

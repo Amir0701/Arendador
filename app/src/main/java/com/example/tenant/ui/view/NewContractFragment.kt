@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.tenant.R
 import com.example.tenant.data.model.*
 import com.example.tenant.ui.model.NewContractActivityViewModel
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,7 +36,7 @@ class NewContractFragment : Fragment() {
     private lateinit var endOfEndConclusionInputLayout: TextInputLayout
     private lateinit var sumInputLayout: TextInputLayout
     private lateinit var zalogEditTextInputLayout: TextInputLayout
-    private lateinit var zalogEditText: EditText
+    private lateinit var zalogEditText: TextInputEditText
     private lateinit var timeToPayLayout: TextInputLayout
     private lateinit var timeToPay: AutoCompleteTextView
 
@@ -99,7 +100,7 @@ class NewContractFragment : Fragment() {
             updateDateOfEnd()
             sumEditText.setText(it.sum.toString())
             it.zalog?.let{z->
-                zalogEditText.setText(z)
+                zalogEditText.setText(z.toString())
             }
             nextButton.text = "Изменить"
         }

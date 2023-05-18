@@ -19,6 +19,7 @@ import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.ui.model.MainActivityViewModel
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ObjectsFragment : Fragment() {
@@ -37,7 +38,7 @@ class ObjectsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val addNewObjectButton: FloatingActionButton = view.findViewById(R.id.add_new_object)
+        val addNewObjectButton: ExtendedFloatingActionButton = view.findViewById(R.id.add_new_object)
         objectsRecyclerView = view.findViewById(R.id.objectsRecycler)
 
         addNewObjectButton.setOnClickListener {

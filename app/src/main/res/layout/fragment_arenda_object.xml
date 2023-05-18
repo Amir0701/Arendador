@@ -188,13 +188,15 @@
         app:layout_constraintStart_toEndOf="@id/zalogTextView"/>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addContractButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:layout_marginEnd="24dp"
-        android:src="@drawable/ic__add"
+        android:layout_marginEnd="10dp"
+        android:text="Добавить договор"
+        android:textSize="12sp"
+        app:icon="@drawable/ic__add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
