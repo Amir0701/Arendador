@@ -248,7 +248,7 @@ class DiagramFragment : Fragment() {
         exploitationPieChart.setDrawEntryLabels(false)
         exploitationPieChart.legend.textColor = Color.WHITE
         exploitationPieChart.legend.isWordWrapEnabled = true
-
+        exploitationPieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         exploitationPieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
             override fun onValueSelected(e: Entry?, h: Highlight?) {
                 val pieEntry = (e as PieEntry)

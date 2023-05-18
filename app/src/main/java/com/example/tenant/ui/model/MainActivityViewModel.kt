@@ -108,7 +108,9 @@ class MainActivityViewModel(app: Application,
                         sum += exploitation.sum ?: 0
                 }
 
-                data.add(PieEntry(sum.toFloat(), objectWithExploitations.obbject.name))
+                if(sum != 0){
+                    data.add(PieEntry(sum.toFloat(), objectWithExploitations.obbject.name))
+                }
             }
         }
 
