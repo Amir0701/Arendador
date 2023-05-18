@@ -21,6 +21,7 @@ import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.ui.model.MainActivityViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.delay
 
 class ObjectsFragment : Fragment() {
     private lateinit var objectsRecyclerView: RecyclerView
@@ -149,6 +150,8 @@ class ObjectsFragment : Fragment() {
                     mainActivityViewModel.addCategory(Category(0, "Дача"))
                     mainActivityViewModel.addCategory(Category(0, "Комната"))
                     mainActivityViewModel.addCategory(Category(0, "Гараж"))
+                    Thread.sleep(500L)
+                    mainActivityViewModel.getAllCategories()
                 }
             }
         })
