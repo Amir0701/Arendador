@@ -105,4 +105,15 @@
         app:layout_constraintTop_toBottomOf="@id/addressInputLayout"
         app:layout_constraintStart_toStartOf="parent"/>
 
+
+    <Button
+        android:id="@+id/addImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Изображение"
+        app:layout_constraintTop_toBottomOf="@id/addObjectButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
