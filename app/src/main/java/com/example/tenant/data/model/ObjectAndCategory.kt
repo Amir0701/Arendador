@@ -10,5 +10,6 @@ data class ObjectAndCategory(
     var objectStatus: ObjectStatus,
     var square: Double?,
     val address: String?,
-    val categoryName: String
+    val categoryName: String,
+    val image: String?
 ): java.io.Serializable

@@ -113,6 +113,8 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel.objectsWithCategory.observe(viewLifecycleOwner, Observer {
             it?.let {list->
                 adapter.objectsList.submitList(list)
+                if(list.isNotEmpty())
+                    Log.i("imgg", list.get(list.size - 1).image.toString())
             }
         })
     }

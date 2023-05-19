@@ -2,13 +2,15 @@ package com.example.tenant.ui.view
 
 import android.Manifest
 import android.app.Activity
-import android.content.ClipData
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.AssetFileDescriptor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.os.FileUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import android.widget.EditText
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toFile
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -26,12 +29,14 @@ import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.ui.model.MainActivityViewModel
+import com.example.tenant.util.ImageUtil
 import com.example.tenant.util.RealPathUtil
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
+import java.io.FileDescriptor
 import java.io.FileInputStream
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.IOException
+
 
 class NewObjectFragment : Fragment() {
     private lateinit var mainActivityViewModel: MainActivityViewModel
@@ -43,7 +48,7 @@ class NewObjectFragment : Fragment() {
     private lateinit var nameInputLayout: TextInputLayout
     private lateinit var categoryInputLayout: TextInputLayout
     private lateinit var addImageButton: Button
-    private var imageByteArray: ByteArray? = null
+    private var imagePath: String? = null
 
     private val args: NewObjectFragmentArgs by navArgs()
 
@@ -170,12 +175,12 @@ class NewObjectFragment : Fragment() {
 
         if(name != null && idCat != null){
             args.editObject?.let {
-                if(imageByteArray != null)
-                    return Obbject(it.id, name, idCat, it.objectStatus, square, address, imageByteArray)
+                if(imagePath != null)
+                    return Obbject(it.id, name, idCat, it.objectStatus, square, address, imagePath)
                 else
-                    return Obbject(it.id, name, idCat, it.objectStatus, square, address)
+                    return Obbject(it.id, name, idCat, it.objectStatus, square, address, it.image)
             }
-            return Obbject(0, name, idCat, ObjectStatus.FREE, square, address, imageByteArray)
+            return Obbject(0, name, idCat, ObjectStatus.FREE, square, address, imagePath)
         }
         return null
     }
@@ -183,7 +188,7 @@ class NewObjectFragment : Fragment() {
     private fun chooseImage(){
         if (ContextCompat.checkSelfPermission(
                 requireContext().applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             val intent = Intent()
@@ -194,7 +199,7 @@ class NewObjectFragment : Fragment() {
         } else {
             ActivityCompat.requestPermissions(
                 (activity as MainActivity),
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 1
             )
         }
@@ -205,12 +210,38 @@ class NewObjectFragment : Fragment() {
         if(requestCode == CHOOSE_IMAGE && resultCode == Activity.RESULT_OK){
             if(data != null){
                 val uri = data.data
+                val mipmap = uri?.let {
+                    loadImageFromUri(uri)
+                }
                 val file = File(RealPathUtil.getRealPath(requireContext(), uri))
-                val fileInputStream = FileInputStream(file)
-                imageByteArray = ByteArray(file.length().toInt())
-                fileInputStream.read(imageByteArray)
-                Log.i("image", imageByteArray.toString())
+
+                uri?.let {
+                    val flag = ImageUtil.saveBitmapToFile(mipmap, file.name, requireContext())
+                    Log.i("bit", flag.toString())
+                    if(flag)
+                        imagePath = file.name
+                }
             }
         }
+    }
+
+    private fun loadImageFromUri(uri: Uri): Bitmap? {
+        try {
+            // Получаем AssetFileDescriptor для выбранного изображения
+            val assetFileDescriptor: AssetFileDescriptor =
+                context?.contentResolver?.openAssetFileDescriptor(uri, "r")!!
+            if (assetFileDescriptor != null) {
+                // Получаем FileDescriptor из AssetFileDescriptor
+                val fileDescriptor: FileDescriptor = assetFileDescriptor.fileDescriptor
+
+                // Декодируем изображение с помощью BitmapFactory
+                // и создаем Bitmap из FileDescriptor
+                Log.i("bitmap", "ok")
+                return BitmapFactory.decodeFileDescriptor(fileDescriptor)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

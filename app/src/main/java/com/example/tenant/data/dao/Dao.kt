@@ -22,7 +22,7 @@ interface Dao {
     suspend fun getAllObjects(): List<Obbject>
 
     @Query("SELECT obbject.id, obbject.name, obbject.category_id AS categoryId, " +
-            "obbject.status as objectStatus, obbject.square, obbject.address, category.name AS categoryName " +
+            "obbject.status as objectStatus, obbject.square, obbject.address, category.name AS categoryName, obbject.image " +
             "FROM obbject INNER JOIN category ON obbject.category_id=category.id")
     suspend fun getAllObjectsWithCategory(): List<ObjectAndCategory>
 

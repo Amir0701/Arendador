@@ -17,7 +17,7 @@ data class Obbject(
     var square: Double?,
     val address: String?,
     @Nullable
-    var image: ByteArray? = null
+    var image: String? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -46,7 +46,7 @@ data class Obbject(
         result = 31 * result + objectStatus.hashCode()
         result = 31 * result + (square?.hashCode() ?: 0)
         result = 31 * result + (address?.hashCode() ?: 0)
-        result = 31 * result + (image?.contentHashCode() ?: 0)
+        result = 31 * result + (image?.hashCode() ?: 0)
         return result
     }
 }
