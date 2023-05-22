@@ -2,7 +2,6 @@ package com.example.tenant.ui.view
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
@@ -20,7 +19,6 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -28,13 +26,12 @@ import androidx.navigation.fragment.navArgs
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectStatus
-import com.example.tenant.ui.model.MainActivityViewModel
+import com.example.tenant.ui.viewmodel.MainActivityViewModel
 import com.example.tenant.util.ImageUtil
 import com.example.tenant.util.RealPathUtil
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.FileDescriptor
-import java.io.FileInputStream
 import java.io.IOException
 
 

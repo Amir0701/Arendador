@@ -1,7 +1,6 @@
 package com.example.tenant.ui.view
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -10,14 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.NumberPicker.OnValueChangeListener
 import android.widget.Spinner
-import android.widget.TextView
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.tenant.R
-import com.example.tenant.ui.model.MainActivityViewModel
+import com.example.tenant.ui.viewmodel.MainActivityViewModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description

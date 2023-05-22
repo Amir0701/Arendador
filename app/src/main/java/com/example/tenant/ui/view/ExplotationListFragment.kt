@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Exploitation
-import com.example.tenant.ui.model.ChosenActivityViewModel
+import com.example.tenant.ui.viewmodel.ChosenActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 

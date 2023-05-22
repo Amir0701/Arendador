@@ -1,4 +1,4 @@
-package com.example.tenant.ui.model
+package com.example.tenant.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -11,7 +11,6 @@ import com.example.tenant.data.repository.ExploitationRepository
 import com.example.tenant.data.repository.HistoryPayRepository
 import com.example.tenant.data.repository.ObjectRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ChosenActivityViewModel(val app: App,

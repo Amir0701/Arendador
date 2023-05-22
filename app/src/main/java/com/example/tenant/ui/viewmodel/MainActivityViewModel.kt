@@ -1,4 +1,4 @@
-package com.example.tenant.ui.model
+package com.example.tenant.ui.viewmodel
 
 import android.app.Application
 import android.util.Log

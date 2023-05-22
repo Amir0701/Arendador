@@ -1,7 +1,6 @@
 package com.example.tenant.ui.view
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,11 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
-import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import com.example.tenant.R
 import com.example.tenant.data.model.*
-import com.example.tenant.ui.model.NewContractActivityViewModel
+import com.example.tenant.ui.viewmodel.NewContractActivityViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat

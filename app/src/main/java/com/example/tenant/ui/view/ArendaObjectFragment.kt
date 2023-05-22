@@ -1,28 +1,28 @@
 package com.example.tenant.ui.view
 
 import android.content.Intent
-import android.icu.util.LocaleData
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.example.tenant.R
 import com.example.tenant.data.model.*
-import com.example.tenant.ui.model.ChosenActivityViewModel
+import com.example.tenant.ui.viewmodel.ChosenActivityViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.FileInputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.time.temporal.Temporal
 import java.util.*
-import javax.xml.datatype.DatatypeConstants.MONTHS
 
 class ArendaObjectFragment : Fragment() {
     private lateinit var addContractButton: ExtendedFloatingActionButton
@@ -34,6 +34,7 @@ class ArendaObjectFragment : Fragment() {
     private lateinit var payTimeTextView: TextView
     private lateinit var zalogTextView: TextView
     private lateinit var viewModel: ChosenActivityViewModel
+    private lateinit var imageView: ImageView
 
     private var contractWithTenant: ContractWithTenant? = null
 
@@ -91,6 +92,7 @@ class ArendaObjectFragment : Fragment() {
         sumTextView = view.findViewById(R.id.sumInputTextView)
         payTimeTextView = view.findViewById(R.id.payTimeInputTextView)
         zalogTextView = view.findViewById(R.id.zalogInputTextView)
+        imageView = view.findViewById(R.id.image)
     }
 
     private fun observeContractWithTenant(){
@@ -109,6 +111,18 @@ class ArendaObjectFragment : Fragment() {
                             zalogTextView.text = (it.zalog ?: "нет").toString()
                             addContractButton.setIconResource(R.drawable.ic_edit)
                             addContractButton.text = "Редактировать"
+
+                            (activity as ChosenObjectActivity).objectAndCategory?.let { obj->
+                                if(obj.image != null) {
+                                    Log.i("imggg", "yea")
+                                    val file = getImage(obj.image)
+                                    if(file != null){
+                                        Log.i("imggg", "yeap")
+                                        //Picasso.get().load(file).into(imageView)
+                                        Glide.with(requireContext()).load(file).into(imageView)
+                                    }
+                                }
+                            }
                             (activity as ChosenObjectActivity).objectAndCategory?.id?.let {obj_id ->
                                 viewModel.getHistoryPay(obj_id, it.id)
                             }
@@ -223,5 +237,27 @@ class ArendaObjectFragment : Fragment() {
         viewModel.historyPay.observe(viewLifecycleOwner, Observer {
             historyPayList = it
         })
+    }
+
+    private fun getImage(name: String): ByteArray? {
+        var fileInputStream: FileInputStream? = null
+        try {
+            fileInputStream = requireContext().openFileInput(name)
+            val b = fileInputStream?.readAllBytes()
+            Log.i("imggg", b.toString())
+            //val file = File("img")
+
+            //val fileOutputStream = FileOutputStream(file)
+            //fileOutputStream.write(b)
+            return b
+
+        }catch (ex: IOException){
+            ex.printStackTrace()
+        }
+        finally {
+            fileInputStream?.close()
+        }
+
+        return null
     }
 }

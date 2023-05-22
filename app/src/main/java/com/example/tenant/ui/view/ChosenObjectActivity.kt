@@ -18,8 +18,8 @@ import com.example.tenant.data.repository.ExploitationRepository
 import com.example.tenant.data.repository.HistoryPayRepository
 import com.example.tenant.data.repository.ObjectRepository
 import com.example.tenant.ioc.component.ChosenActivityComponent
-import com.example.tenant.ui.model.ChosenActivityViewModel
-import com.example.tenant.ui.model.ChosenActivityViewModelFactory
+import com.example.tenant.ui.viewmodel.ChosenActivityViewModel
+import com.example.tenant.ui.viewmodel.ChosenActivityViewModelFactory
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject

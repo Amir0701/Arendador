@@ -18,10 +18,8 @@ import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
-import com.example.tenant.ui.model.MainActivityViewModel
+import com.example.tenant.ui.viewmodel.MainActivityViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.delay
 
 class ObjectsFragment : Fragment() {
     private lateinit var objectsRecyclerView: RecyclerView

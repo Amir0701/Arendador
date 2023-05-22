@@ -11,8 +11,8 @@ import com.example.tenant.data.repository.ContractRepository
 import com.example.tenant.data.repository.ObjectRepository
 import com.example.tenant.data.repository.TenantRepository
 import com.example.tenant.ioc.component.NewContractActivityComponent
-import com.example.tenant.ui.model.NewContractActivityViewModel
-import com.example.tenant.ui.model.NewContractActivityViewModelFactory
+import com.example.tenant.ui.viewmodel.NewContractActivityViewModel
+import com.example.tenant.ui.viewmodel.NewContractActivityViewModelFactory
 import javax.inject.Inject
 
 class NewContractActivity : AppCompatActivity() {
