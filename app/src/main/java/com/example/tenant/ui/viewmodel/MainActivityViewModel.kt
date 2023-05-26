@@ -18,7 +18,6 @@ class MainActivityViewModel(app: Application,
                             private val contractRepository: ContractRepository,
                             private val exploitationRepository: ExploitationRepository,
                             private val historyPayRepository: HistoryPayRepository): AndroidViewModel(app) {
-    val objectIdLiveDate = MutableLiveData<Int?>()
     val objectLiveData = MutableLiveData<Obbject>()
     val categoryLiveData = MutableLiveData<List<Category>>()
     val objectsLiveData = MutableLiveData<List<Obbject>>()
