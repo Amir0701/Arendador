@@ -11,4 +11,5 @@ interface AppComponent {
     fun getChosenActivityComponent(): ChosenActivityComponent
     fun getNewExploitationActivityComponent(): NewExploitationActivityComponent
     fun getNewContractActivityComponent(): NewContractActivityComponent
+    fun getMapActivityComponent(): MapActivityComponent
 }

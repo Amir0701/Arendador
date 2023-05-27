@@ -16,6 +16,7 @@ import com.example.tenant.data.repository.*
 import com.example.tenant.ioc.component.MainActivityComponent
 import com.example.tenant.ui.viewmodel.MainActivityViewModel
 import com.example.tenant.ui.viewmodel.MainActivityViewModelFactory
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -48,7 +48,6 @@ class ObjectsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
-        observe()
         observeObj()
         observeObjects()
         observeObjectsWithCategory()
@@ -82,13 +81,6 @@ class ObjectsFragment : Fragment() {
         })
     }
 
-    private fun observe(){
-        mainActivityViewModel.objectIdLiveDate.observe(viewLifecycleOwner, Observer {
-            it?.let {id->
-                Log.i("objId", id.toString())
-            }
-        })
-    }
 
     private fun observeObj(){
         mainActivityViewModel.objectLiveData.observe(viewLifecycleOwner, Observer {
