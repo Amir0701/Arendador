@@ -20,6 +20,8 @@ import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -88,14 +90,32 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
                     customInfoWindowAdapter.objects = this as MutableList<ObjectAndCategory>
                 }
                 for (i in list.indices){
+
                     val marker = map.addMarker(MarkerOptions()
                         .position(list[i])
-                        .title(obj?.get(i)?.id.toString()))
+                        .title(obj?.get(i)?.id.toString())
+                        .icon(BitmapDescriptorFactory.defaultMarker(getColor(obj!![i].categoryName))))
                 }
 
                 map.moveCamera(CameraUpdateFactory.newLatLng(list[list.size - 1]))
             }
         })
+    }
+
+    private fun getColor(category: String): Float{
+        if(category == "Квартира")
+            return BitmapDescriptorFactory.HUE_RED
+
+        if(category == "Дача")
+            return BitmapDescriptorFactory.HUE_BLUE
+
+        if(category == "Гараж")
+            return BitmapDescriptorFactory.HUE_VIOLET
+
+        if(category == "Комната")
+            return BitmapDescriptorFactory.HUE_ORANGE
+
+        return BitmapDescriptorFactory.HUE_RED
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
