@@ -2,12 +2,14 @@ package com.example.tenant.ui.view
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.AssetFileDescriptor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,12 +19,14 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectStatus
@@ -32,6 +36,7 @@ import com.example.tenant.util.RealPathUtil
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.FileDescriptor
+import java.io.FileInputStream
 import java.io.IOException
 
 
@@ -44,7 +49,7 @@ class NewObjectFragment : Fragment() {
     private lateinit var addressEditText: EditText
     private lateinit var nameInputLayout: TextInputLayout
     private lateinit var categoryInputLayout: TextInputLayout
-    private lateinit var addImageButton: Button
+    private lateinit var addImageButton: ImageView
     private var imagePath: String? = null
 
     private val args: NewObjectFragmentArgs by navArgs()
@@ -102,6 +107,12 @@ class NewObjectFragment : Fragment() {
 
             obj.address?.let {
                 addressEditText.setText(it)
+            }
+
+            obj.image?.let {
+                Glide.with(requireContext())
+                    .load(getImage(it, requireContext()))
+                    .into(addImageButton)
             }
 
             addObjectButton.text = "Изменить"
@@ -218,6 +229,10 @@ class NewObjectFragment : Fragment() {
                     if(flag)
                         imagePath = file.name
                 }
+
+                if(mipmap != null){
+                    addImageButton.setImageBitmap(mipmap)
+                }
             }
         }
     }
@@ -239,6 +254,32 @@ class NewObjectFragment : Fragment() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+        return null
+    }
+
+    private fun getImage(name: String, context: Context): ByteArray? {
+        var fileInputStream: FileInputStream? = null
+        try {
+            fileInputStream = context.openFileInput(name)
+            val b = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                fileInputStream?.readAllBytes()
+            } else {
+                fileInputStream?.readBytes()
+            }
+            Log.i("imggg", b.toString())
+            //val file = File("img")
+
+            //val fileOutputStream = FileOutputStream(file)
+            //fileOutputStream.write(b)
+            return b
+
+        }catch (ex: IOException){
+            ex.printStackTrace()
+        }
+        finally {
+            fileInputStream?.close()
+        }
+
         return null
     }
 }

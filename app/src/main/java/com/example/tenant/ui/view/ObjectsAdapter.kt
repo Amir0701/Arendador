@@ -80,11 +80,15 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
         }
 
+        holder.image.setImageResource(R.drawable.template_01)
+
         currentObject.image?.let {path->
             Glide.with(holder.itemView.context)
                 .load(getImage(path, holder.itemView.context))
                 .into(holder.image)
         }
+
+
 
         holder.itemView.setOnClickListener {
             objectItemClickListener?.onItemClick(currentObject)
