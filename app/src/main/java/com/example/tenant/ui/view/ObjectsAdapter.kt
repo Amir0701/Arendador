@@ -1,20 +1,28 @@
 package com.example.tenant.ui.view
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.tenant.R
 import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
 import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.data.model.ObjectWithContracts
 import com.google.android.material.button.MaterialButton
+import java.io.FileInputStream
+import java.io.IOException
 
 class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
@@ -43,6 +51,7 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
         val statusTextView: TextView = itemView.findViewById(R.id.cardObjectStatus)
         val editButton: MaterialButton = itemView.findViewById(R.id.editObjectButton)
         val deleteButton: MaterialButton = itemView.findViewById(R.id.deleteObjectButton)
+        val image: ImageView = itemView.findViewById(R.id.objectIMage)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -71,6 +80,12 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
         }
 
+        currentObject.image?.let {path->
+            Glide.with(holder.itemView.context)
+                .load(getImage(path, holder.itemView.context))
+                .into(holder.image)
+        }
+
         holder.itemView.setOnClickListener {
             objectItemClickListener?.onItemClick(currentObject)
         }
@@ -88,6 +103,33 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return objectsList.currentList.size
+    }
+
+
+    private fun getImage(name: String, context: Context): ByteArray? {
+        var fileInputStream: FileInputStream? = null
+        try {
+            fileInputStream = context.openFileInput(name)
+            val b = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                fileInputStream?.readAllBytes()
+            } else {
+                fileInputStream?.readBytes()
+            }
+            Log.i("imggg", b.toString())
+            //val file = File("img")
+
+            //val fileOutputStream = FileOutputStream(file)
+            //fileOutputStream.write(b)
+            return b
+
+        }catch (ex: IOException){
+            ex.printStackTrace()
+        }
+        finally {
+            fileInputStream?.close()
+        }
+
+        return null
     }
 
     interface ObjectItemClickListener{
