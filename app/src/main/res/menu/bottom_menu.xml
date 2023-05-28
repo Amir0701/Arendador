@@ -9,9 +9,4 @@
         android:id="@+id/diagramFragment"
         android:icon="@drawable/ic_trending_up"
         android:title="Диаграммы"/>
-
-    <item
-        android:id="@+id/mapFragment"
-        android:icon="@drawable/ic_map_24"
-        android:title="Карта"/>
 </menu>

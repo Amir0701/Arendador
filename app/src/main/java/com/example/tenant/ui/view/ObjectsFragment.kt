@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SwitchCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 class ObjectsFragment : Fragment() {
     private lateinit var objectsRecyclerView: RecyclerView
     private lateinit var mainActivityViewModel: MainActivityViewModel
+    private lateinit var mapSwitch: SwitchCompat
 
     val adapter = ObjectsAdapter()
     override fun onCreateView(
@@ -43,6 +45,12 @@ class ObjectsFragment : Fragment() {
         addNewObjectButton.setOnClickListener {
             findNavController().navigate(R.id.action_objectsFragment_to_newObjectFragment2)
         }
+
+        mapSwitch = view.findViewById(R.id.mapSwitch)
+        mapSwitch.setOnCheckedChangeListener { compoundButton, b ->
+            val intent = Intent((activity as MainActivity), MapActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onStart() {
@@ -61,6 +69,7 @@ class ObjectsFragment : Fragment() {
         mainActivityViewModel.getAllCategories()
         initRecycler()
         setDeleteClickListener()
+        mapSwitch.isChecked = false
     }
 
     private fun initRecycler(){

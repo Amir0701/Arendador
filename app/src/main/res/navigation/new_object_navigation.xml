@@ -35,9 +35,4 @@
         android:name="com.example.tenant.ui.view.DiagramFragment"
         android:label="fragment_diagram"
         tools:layout="@layout/fragment_diagram" />
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.example.tenant.ui.view.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
 </navigation>

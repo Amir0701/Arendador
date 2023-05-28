@@ -1,11 +1,15 @@
 package com.example.tenant.ui.view
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.tenant.App
@@ -32,6 +36,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
     private lateinit var mapActivityViewModel: MapActivityViewModel
     private lateinit var customInfoWindowAdapter: CustomInfoWindowAdapter
     private lateinit var infoButton: Button
+    private val LOCATON_PERMISSION = 110
 
     @Inject
     lateinit var objectRepository: ObjectRepository
@@ -143,6 +148,31 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, OnMarkerClickListen
                 intent.putExtra("intentObject", bundle)
                 startActivity(intent)
             }
+        }
+    }
+
+    private fun getLocationPermission(){
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        if(ContextCompat.checkSelfPermission(applicationContext,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED){
+            if(ContextCompat.checkSelfPermission(applicationContext,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED){
+
+            }
+            else{
+                ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATON_PERMISSION)
+            }
+        }else{
+            ActivityCompat.requestPermissions(this,
+                permissions,
+                LOCATON_PERMISSION)
         }
     }
 }
