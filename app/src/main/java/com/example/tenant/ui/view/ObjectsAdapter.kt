@@ -26,6 +26,10 @@ import java.io.IOException
 
 class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
 
+    companion object{
+        var images = mutableMapOf<Int, ByteArray>()
+    }
+
     private val differ = object: DiffUtil.ItemCallback<ObjectAndCategory>(){
         override fun areItemsTheSame(
             oldItem: ObjectAndCategory,
@@ -83,9 +87,11 @@ class ObjectsAdapter: RecyclerView.Adapter<ObjectsAdapter.ViewHolder>() {
         holder.image.setImageResource(R.drawable.template_01)
 
         currentObject.image?.let {path->
+            val b = getImage(path, holder.itemView.context)
             Glide.with(holder.itemView.context)
-                .load(getImage(path, holder.itemView.context))
+                .load(b)
                 .into(holder.image)
+            images[currentObject.id] = b!!
         }
 
 

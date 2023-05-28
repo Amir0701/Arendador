@@ -63,9 +63,10 @@ class CustomInfoWindowAdapter(val context: Context): GoogleMap.InfoWindowAdapter
                 status.text = "В аренде"
             }
 
+            imageView.setImageResource(R.drawable.template_01)
             obj.image?.let {path->
                 Glide.with(context.applicationContext)
-                    .load(getImage(path, context.applicationContext))
+                    .load(ObjectsAdapter.images[id])
                     .into(imageView)
             }
             button.setOnClickListener {
