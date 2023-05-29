@@ -205,6 +205,7 @@
         android:id="@+id/image"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
