@@ -51,6 +51,8 @@ class DiagramFragment : Fragment() {
         yearSpinner = view.findViewById(R.id.yearSpinner)
         categorySpinner = view.findViewById(R.id.categorySpinner)
 
+        (activity as MainActivity).supportActionBar?.title = "Диаграммы"
+
         observeYears()
         observePieData()
         observeCategory()

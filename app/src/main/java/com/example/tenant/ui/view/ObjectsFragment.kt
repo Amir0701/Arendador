@@ -46,6 +46,7 @@ class ObjectsFragment : Fragment() {
             findNavController().navigate(R.id.action_objectsFragment_to_newObjectFragment2)
         }
 
+        (activity as MainActivity).supportActionBar?.title = "Объекты недвижимости"
         mapSwitch = view.findViewById(R.id.mapSwitch)
         mapSwitch.setOnCheckedChangeListener { compoundButton, b ->
             val intent = Intent((activity as MainActivity), MapActivity::class.java)

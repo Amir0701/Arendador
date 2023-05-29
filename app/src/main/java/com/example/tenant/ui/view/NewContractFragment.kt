@@ -71,6 +71,9 @@ class NewContractFragment : Fragment() {
             }
         }
 
+
+        (activity as NewContractActivity).supportActionBar?.title = "Договор"
+
         setContractData()
     }
 

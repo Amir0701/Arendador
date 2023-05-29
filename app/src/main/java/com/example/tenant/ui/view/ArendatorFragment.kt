@@ -51,6 +51,7 @@ class ArendatorFragment : Fragment() {
             }
         }
 
+        (activity as NewContractActivity).supportActionBar?.title = "Данные арендатора"
         setTenantData()
     }
 
