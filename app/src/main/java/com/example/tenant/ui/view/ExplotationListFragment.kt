@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ class ExplotationListFragment : Fragment() {
     private lateinit var viewModel: ChosenActivityViewModel
     private lateinit var exploitationsRecyclerView: RecyclerView
     private lateinit var exploitationAdapter: ExploitationListAdapter
+
     private var id: Int? = null
 
     override fun onCreateView(
