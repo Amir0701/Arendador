@@ -1,10 +1,15 @@
 package com.example.tenant.ui.view
 
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.room.Room
+import com.example.tenant.R
 import com.example.tenant.data.AppDatabase
 import com.example.tenant.data.model.ContractStatus
 import com.example.tenant.data.model.HistoryPay
@@ -118,10 +123,26 @@ class BankNotificationListenerService: NotificationListenerService() {
 
                         val historyPay = HistoryPay(0, objId, sum, c.id, Calendar.getInstance().time, overdue)
                         dao.addHistoryPay(historyPay)
+                        sendNotification(objectWithHistoryPay.obbject.name)
                     }
                 }
             }
         }
+    }
+
+    private fun sendNotification(objectName: String){
+        val notificationChannel = NotificationChannel("notif", "notif", NotificationManager.IMPORTANCE_HIGH)
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(notificationChannel)
+
+        val notificationCompatBuilder: NotificationCompat.Builder =
+            NotificationCompat.Builder(applicationContext, "notif")
+        notificationCompatBuilder.setContentTitle("Оплаты аренды")
+        notificationCompatBuilder.setContentText("Пришла оплата за недвижимость $objectName")
+        notificationCompatBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
+        notificationCompatBuilder.setAutoCancel(true)
+        val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(applicationContext)
+        notificationManagerCompat.notify(7, notificationCompatBuilder.build())
     }
 
     private fun reformat(date: Date): String{
