@@ -2,7 +2,6 @@ package com.example.tenant.data.dao
 
 import androidx.room.*
 import com.example.tenant.data.model.*
-import java.util.*
 
 @androidx.room.Dao
 interface Dao {
@@ -88,4 +87,10 @@ interface Dao {
     @Transaction
     @Query("SELECT * FROM Obbject")
     suspend fun getObjectsWithExploitations(): List<ObjectWithExploitation>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addNotification(notificationEntity: NotificationEntity)
+
+    @Query("SELECT * FROM NotificationEntity")
+    suspend fun getNotifications(): List<NotificationEntity>
 }
