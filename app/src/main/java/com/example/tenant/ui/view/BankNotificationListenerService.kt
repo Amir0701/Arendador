@@ -137,7 +137,7 @@ class BankNotificationListenerService: NotificationListenerService() {
 
         val notificationCompatBuilder: NotificationCompat.Builder =
             NotificationCompat.Builder(applicationContext, "notif")
-        notificationCompatBuilder.setContentTitle("Оплаты аренды")
+        notificationCompatBuilder.setContentTitle("Оплата аренды")
         notificationCompatBuilder.setContentText("Пришла оплата за недвижимость $objectName")
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_launcher_foreground)
         notificationCompatBuilder.setAutoCancel(true)
