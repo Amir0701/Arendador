@@ -10,14 +10,15 @@ import com.example.tenant.data.repository.*
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Calendar
+import java.util.*
 
 class MainActivityViewModel(app: Application,
                             private val objectRepository: ObjectRepository,
                             private val categoryRepository: CategoryRepository,
                             private val contractRepository: ContractRepository,
                             private val exploitationRepository: ExploitationRepository,
-                            private val historyPayRepository: HistoryPayRepository): AndroidViewModel(app) {
+                            private val historyPayRepository: HistoryPayRepository,
+                            private val notificationRepository: NotificationRepository): AndroidViewModel(app) {
     val objectLiveData = MutableLiveData<Obbject>()
     val categoryLiveData = MutableLiveData<List<Category>>()
     val objectsLiveData = MutableLiveData<List<Obbject>>()
@@ -29,6 +30,7 @@ class MainActivityViewModel(app: Application,
     val years = MutableLiveData<List<Int>>()
     private var objectWithExploitation: List<ObjectWithExploitation>? = null
     val exploitationsPieData = MutableLiveData<List<PieEntry>>()
+    val notificationsLiveData = MutableLiveData<List<NotificationEntity>>()
 
     fun addObject(obbject: Obbject) = viewModelScope.launch(Dispatchers.IO) {
         objectRepository.add(obbject)
@@ -132,5 +134,13 @@ class MainActivityViewModel(app: Application,
         }
 
         years.postValue(set.toList())
+    }
+
+    fun addNotification(notificationEntity: NotificationEntity) = viewModelScope.launch(Dispatchers.IO) {
+        notificationRepository.addNotification(notificationEntity)
+    }
+
+    fun getAllNotifications() = viewModelScope.launch(Dispatchers.IO) {
+        notificationsLiveData.postValue(notificationRepository.getAllNotification())
     }
 }

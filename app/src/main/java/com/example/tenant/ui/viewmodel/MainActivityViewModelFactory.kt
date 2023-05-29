@@ -10,8 +10,15 @@ class MainActivityViewModelFactory(private val app: Application,
                                    private val categoryRepository: CategoryRepository,
                                    private val contractRepository: ContractRepository,
                                    private val exploitationRepository: ExploitationRepository,
-                                   private val historyPayRepository: HistoryPayRepository): ViewModelProvider.Factory {
+                                   private val historyPayRepository: HistoryPayRepository,
+                                   private val notificationRepository: NotificationRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainActivityViewModel(app, objectRepository, categoryRepository, contractRepository, exploitationRepository, historyPayRepository) as T
+        return MainActivityViewModel(app,
+            objectRepository,
+            categoryRepository,
+            contractRepository,
+            exploitationRepository,
+            historyPayRepository,
+            notificationRepository) as T
     }
 }

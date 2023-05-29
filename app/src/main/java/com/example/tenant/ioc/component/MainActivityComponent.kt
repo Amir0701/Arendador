@@ -12,6 +12,7 @@ import dagger.Subcomponent
 @ContractRepositoryScope
 @HistoryPayRepositoryScope
 @TenantRepositoryScope
+@NotificationRepositoryScope
 interface MainActivityComponent {
     fun inject(mainActivity: MainActivity)
 }

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -17,7 +16,6 @@ import com.example.tenant.data.repository.*
 import com.example.tenant.ioc.component.MainActivityComponent
 import com.example.tenant.ui.viewmodel.MainActivityViewModel
 import com.example.tenant.ui.viewmodel.MainActivityViewModelFactory
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,12 +45,23 @@ class MainActivity: AppCompatActivity(){
     @Inject
     lateinit var historyPayRepository: HistoryPayRepository
 
+    @Inject
+    lateinit var notificationRepository: NotificationRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mainActivityComponent = (application as App).appComponent.getMainActivityComponent()
         mainActivityComponent.inject(this)
-        val factory = MainActivityViewModelFactory(application, objectRepository, categoryRepository, contractRepository, exploitationRepository, historyPayRepository)
+        val factory = MainActivityViewModelFactory(
+            application,
+            objectRepository,
+            categoryRepository,
+            contractRepository,
+            exploitationRepository,
+            historyPayRepository,
+            notificationRepository
+        )
         mainActivityViewModel = ViewModelProvider(this, factory)[MainActivityViewModel::class.java]
         var res: List<Tenant>? = null
         CoroutineScope(Dispatchers.IO).launch {
