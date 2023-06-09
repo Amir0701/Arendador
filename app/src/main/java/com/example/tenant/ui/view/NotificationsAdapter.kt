@@ -4,14 +4,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.NotificationEntity
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class NotificationsAdapter: RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder>() {
-    var notifications: List<NotificationEntity> = mutableListOf()
+class NotificationsAdapter @Inject constructor(): RecyclerView.Adapter<NotificationsAdapter.NotificationViewHolder>() {
+    private val differ = object: DiffUtil.ItemCallback<NotificationEntity>(){
+        override fun areItemsTheSame(
+            oldItem: NotificationEntity,
+            newItem: NotificationEntity
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: NotificationEntity,
+            newItem: NotificationEntity
+        ): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
+    val notifications = AsyncListDiffer(this, differ)
 
     class NotificationViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView){
         val title: TextView = itemView.findViewById(R.id.notificationTitle)
@@ -26,18 +46,18 @@ class NotificationsAdapter: RecyclerView.Adapter<NotificationsAdapter.Notificati
     }
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
-        val currentNotification = notifications[position]
+        val currentNotification = notifications.currentList[position]
         holder.title.text = currentNotification.title
         holder.message.text = currentNotification.message
         holder.date.text = reformat(currentNotification.date)
     }
 
     override fun getItemCount(): Int {
-        return notifications.size
+        return notifications.currentList.size
     }
 
     private fun reformat(date: Date): String{
-        val format = "dd.mm.yyyy"
+        val format = "dd.MM.yyyy"
         val simpleDateFormat = SimpleDateFormat(format, Locale.ENGLISH)
         return simpleDateFormat.format(date)
     }

@@ -8,20 +8,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.room.Room
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.tenant.R
 import com.example.tenant.data.AppDatabase
-import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.ContractStatus
+import com.example.tenant.data.model.NotificationEntity
 import com.example.tenant.data.model.PayTime
-import com.example.tenant.data.repository.TenantRepository
-import kotlinx.coroutines.*
-import java.sql.Timestamp
-import java.time.temporal.TemporalField
-import java.util.Calendar
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
+import java.util.*
 
 class SendPayNotificationWork constructor(val appContext: Context, params: WorkerParameters): CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
@@ -51,12 +44,16 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
                     if(PayTime.MONTH == contracts.timeOfPay && day == dayC){
                         Log.i("notif", "send")
                         sendNotification(appContext, obbject.name)
+                        addNotification(dao, "День оплаты", "Сегодня день оплаты за недвижимость ${obbject.name}")
                     }
                     else if (PayTime.DAY == contracts.timeOfPay){
                         sendNotification(appContext, obbject.name)
+                        addNotification(dao, "День оплаты", "Сегодня день оплаты за недвижимость ${obbject.name}")
+
                     }
                     else if(PayTime.HALF_MONTH == contracts.timeOfPay && ((dayC + 15) % 30) == day){
                         sendNotification(appContext, obbject.name)
+                        addNotification(dao, "День оплаты", "Сегодня день оплаты за недвижимость ${obbject.name}")
                     }
                 }
             }
@@ -81,5 +78,18 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
         notificationCompatBuilder.setAutoCancel(true)
         val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(appContext)
         notificationManagerCompat.notify(2, notificationCompatBuilder.build())
+
+    }
+
+    private suspend fun addNotification(dao: com.example.tenant.data.dao.Dao, title: String, text: String){
+        dao.addNotification(
+            NotificationEntity(
+                0,
+                title,
+                text,
+                Calendar.getInstance().time,
+                false
+            )
+        )
     }
 }

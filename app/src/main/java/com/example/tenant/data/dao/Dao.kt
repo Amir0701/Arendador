@@ -91,6 +91,6 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addNotification(notificationEntity: NotificationEntity)
 
-    @Query("SELECT * FROM NotificationEntity")
+    @Query("SELECT * FROM NotificationEntity ORDER BY id DESC")
     suspend fun getNotifications(): List<NotificationEntity>
 }

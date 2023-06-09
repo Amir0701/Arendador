@@ -13,6 +13,7 @@ import com.example.tenant.R
 import com.example.tenant.data.AppDatabase
 import com.example.tenant.data.model.ContractStatus
 import com.example.tenant.data.model.HistoryPay
+import com.example.tenant.data.model.NotificationEntity
 import com.example.tenant.data.model.PayTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -124,6 +125,15 @@ class BankNotificationListenerService: NotificationListenerService() {
                         val historyPay = HistoryPay(0, objId, sum, c.id, Calendar.getInstance().time, overdue)
                         dao.addHistoryPay(historyPay)
                         sendNotification(objectWithHistoryPay.obbject.name)
+                        dao.addNotification(
+                            NotificationEntity(
+                                0,
+                                "Оплата аренды",
+                                "Пришла оплата за недвижимость ${objectWithHistoryPay.obbject.name}",
+                                Calendar.getInstance().time,
+                                false
+                            )
+                        )
                     }
                 }
             }
