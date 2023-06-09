@@ -9,4 +9,9 @@
         android:id="@+id/diagramFragment"
         android:icon="@drawable/ic_trending_up"
         android:title="Диаграммы"/>
+
+    <item
+        android:id="@+id/notificationsFragment"
+        android:icon="@drawable/ic_baseline_notifications"
+        android:title="Уведомления"/>
 </menu>

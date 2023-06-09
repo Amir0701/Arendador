@@ -10,7 +10,7 @@ import com.example.tenant.data.model.*
 
 @Database(entities = [Category::class, Contract::class,
     Exploitation::class, HistoryPay::class,
-    Obbject::class, Tenant::class], version = 4)
+    Obbject::class, Tenant::class, NotificationEntity::class], version = 4)
 @TypeConverters(Converter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun getDao(): Dao
@@ -19,6 +19,7 @@ abstract class AppDatabase: RoomDatabase() {
         val Migration1to3 = Migration(1, 3){
             it.execSQL("ALTER TABLE HistoryPay ADD overdue INTEGER DEFAULT 0 NOT NULL")
         }
+
     }
 
 }

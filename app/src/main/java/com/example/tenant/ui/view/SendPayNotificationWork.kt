@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import com.example.tenant.R
 import com.example.tenant.data.AppDatabase
 import com.example.tenant.data.model.ContractStatus
+import com.example.tenant.data.model.NotificationEntity
 import com.example.tenant.data.model.PayTime
 import java.util.*
 
@@ -43,12 +44,16 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
                     if(PayTime.MONTH == contracts.timeOfPay && day == dayC){
                         Log.i("notif", "send")
                         sendNotification(appContext, obbject.name)
+                        addNotification(dao, "День оплаты", "Сегодня день оплаты за недвижимость ${obbject.name}")
                     }
                     else if (PayTime.DAY == contracts.timeOfPay){
                         sendNotification(appContext, obbject.name)
+                        addNotification(dao, "День оплаты", "Сегодня день оплаты за недвижимость ${obbject.name}")
+
                     }
                     else if(PayTime.HALF_MONTH == contracts.timeOfPay && ((dayC + 15) % 30) == day){
                         sendNotification(appContext, obbject.name)
+                        addNotification(dao, "День оплаты", "Сегодня день оплаты за недвижимость ${obbject.name}")
                     }
                 }
             }
@@ -74,5 +79,18 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
         notificationCompatBuilder.setAutoCancel(true)
         val notificationManagerCompat: NotificationManagerCompat = NotificationManagerCompat.from(appContext)
         notificationManagerCompat.notify(2, notificationCompatBuilder.build())
+
+    }
+
+    private suspend fun addNotification(dao: com.example.tenant.data.dao.Dao, title: String, text: String){
+        dao.addNotification(
+            NotificationEntity(
+                0,
+                title,
+                text,
+                Calendar.getInstance().time,
+                false
+            )
+        )
     }
 }
