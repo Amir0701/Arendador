@@ -4,11 +4,10 @@ import android.content.Context
 import android.telephony.SmsManager
 import androidx.room.Room
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.tenant.data.AppDatabase
 import com.example.tenant.data.model.ContractStatus
-import java.util.Calendar
+import java.util.*
 
 class SmsWork(val appContext: Context, params: WorkerParameters): CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
@@ -66,7 +65,14 @@ class SmsWork(val appContext: Context, params: WorkerParameters): CoroutineWorke
                                 val prevLast = historyPay[historyPay.size - 2].overdue
 
                                 if(last > 0 && prevLast > 0){
-                                    SmsManager.getDefault().sendTextMessage(contractWithTenant[contractWithTenant.size - 1].phoneNumber, null, "Вам нужно сегодня заплатить за кватиру", null, null)
+                                    SmsManager.getDefault()
+                                        .sendTextMessage(
+                                            contractWithTenant[contractWithTenant.size - 1].phoneNumber,
+                                            null,
+                                            "Вам нужно сегодня заплатить за кватиру",
+                                            null,
+                                            null
+                                        )
                                 }
                             }
                         }

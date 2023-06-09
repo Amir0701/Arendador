@@ -18,7 +18,8 @@ class ObjectRepository @Inject constructor(private val dao: Dao) {
 
     suspend fun deleteObject(id: Int): Int = dao.deleteObject(id)
 
-    suspend fun updateStatusObject(id: Int, objectStatus: ObjectStatus) = dao.updateObjectStatus(id, objectStatus)
+    suspend fun updateStatusObject(id: Int, objectStatus: ObjectStatus) =
+        dao.updateObjectStatus(id, objectStatus)
 
     suspend fun getObjectsWithHistoryPay() = dao.getObjectsWithHistoryPay()
 

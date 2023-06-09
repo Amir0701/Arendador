@@ -8,20 +8,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.room.Room
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.tenant.R
 import com.example.tenant.data.AppDatabase
-import com.example.tenant.data.model.Category
 import com.example.tenant.data.model.ContractStatus
 import com.example.tenant.data.model.PayTime
-import com.example.tenant.data.repository.TenantRepository
-import kotlinx.coroutines.*
-import java.sql.Timestamp
-import java.time.temporal.TemporalField
-import java.util.Calendar
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
+import java.util.*
 
 class SendPayNotificationWork constructor(val appContext: Context, params: WorkerParameters): CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
@@ -69,7 +61,8 @@ class SendPayNotificationWork constructor(val appContext: Context, params: Worke
     }
 
     private fun sendNotification(appContext: Context, objectName: String){
-        val notificationChannel = NotificationChannel("notif", "notif", NotificationManager.IMPORTANCE_HIGH)
+        val notificationChannel = NotificationChannel("notif", "notif",
+            NotificationManager.IMPORTANCE_HIGH)
         val notificationManager = appContext.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(notificationChannel)
 

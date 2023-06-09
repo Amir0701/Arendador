@@ -5,11 +5,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SwitchCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +26,7 @@ class ObjectsFragment : Fragment() {
     private lateinit var objectsRecyclerView: RecyclerView
     private lateinit var mainActivityViewModel: MainActivityViewModel
     private lateinit var mapSwitch: SwitchCompat
+    private lateinit var addNewObjectButton: ExtendedFloatingActionButton
 
     val adapter = ObjectsAdapter()
     override fun onCreateView(
@@ -39,7 +40,7 @@ class ObjectsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val addNewObjectButton: ExtendedFloatingActionButton = view.findViewById(R.id.add_new_object)
+        addNewObjectButton = view.findViewById(R.id.add_new_object)
         objectsRecyclerView = view.findViewById(R.id.objectsRecycler)
 
         addNewObjectButton.setOnClickListener {
@@ -52,6 +53,8 @@ class ObjectsFragment : Fragment() {
             val intent = Intent((activity as MainActivity), MapActivity::class.java)
             startActivity(intent)
         }
+
+        addNewObjectButton.text = "Добавить объект"
     }
 
     override fun onStart() {
@@ -71,6 +74,7 @@ class ObjectsFragment : Fragment() {
         initRecycler()
         setDeleteClickListener()
         mapSwitch.isChecked = false
+        addNewObjectButton.text = "Добавить объект"
     }
 
     private fun initRecycler(){
@@ -87,6 +91,17 @@ class ObjectsFragment : Fragment() {
                 bundle.putSerializable("object", objectAndCategory)
                 intent.putExtra("intentObject", bundle)
                 startActivity(intent)
+            }
+        })
+
+        objectsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+//                if(dy > 0)
+//                    addNewObjectButton.text = null
+//                else
+//                    addNewObjectButton.text = "Добавить объект"
             }
         })
     }
