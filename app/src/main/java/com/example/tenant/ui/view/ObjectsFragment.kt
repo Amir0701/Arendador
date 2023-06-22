@@ -16,9 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tenant.R
 import com.example.tenant.data.model.Category
-import com.example.tenant.data.model.Obbject
 import com.example.tenant.data.model.ObjectAndCategory
-import com.example.tenant.data.model.ObjectStatus
 import com.example.tenant.ui.viewmodel.MainActivityViewModel
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
@@ -60,15 +58,9 @@ class ObjectsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
-        observeObj()
-        observeObjects()
         observeObjectsWithCategory()
         observeDeleted()
         observeCategories()
-        val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
-        //mainActivityViewModel.addObject(objec1)
-        //mainActivityViewModel.getObject(1)
-        //mainActivityViewModel.getAllObjects()
         mainActivityViewModel.getObjectsWithCategory()
         mainActivityViewModel.getAllCategories()
         initRecycler()
@@ -78,10 +70,6 @@ class ObjectsFragment : Fragment() {
     }
 
     private fun initRecycler(){
-        val objec1 = Obbject(1, "Квартира", 1, ObjectStatus.IN_TENANT, 32.0, "")
-        val objec2 = Obbject(2, "Дача", 2, ObjectStatus.FREE, 44.0, "")
-        val list = listOf(objec1, objec2)
-        //adapter.objectsList = list
         objectsRecyclerView.adapter = adapter
         objectsRecyclerView.layoutManager = LinearLayoutManager(context)
         adapter.setObjectItemClickListener(object: ObjectsAdapter.ObjectItemClickListener{
@@ -94,35 +82,32 @@ class ObjectsFragment : Fragment() {
             }
         })
 
+        objectsRecyclerView.addItemDecoration(ObjectItemDecoration())
+
         objectsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private val HIDE_THRESHOLD = 20
+            private var scrolledDistance = 0
+            private var controlsVisible = true
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                if(scrolledDistance > HIDE_THRESHOLD && controlsVisible){
+                    addNewObjectButton.shrink()
+                    controlsVisible = false
+                    scrolledDistance = 0
+                }else if(scrolledDistance < -HIDE_THRESHOLD && !controlsVisible){
+                    addNewObjectButton.extend()
+                    controlsVisible = true
+                    scrolledDistance = 0
+                }
 
-//                if(dy > 0)
-//                    addNewObjectButton.text = null
-//                else
-//                    addNewObjectButton.text = "Добавить объект"
+                if ((controlsVisible && dy > 0) || (!controlsVisible && dy < 0)) {
+                    scrolledDistance += dy;
+                }
             }
         })
     }
 
-
-    private fun observeObj(){
-        mainActivityViewModel.objectLiveData.observe(viewLifecycleOwner, Observer {
-            it?.let {obj ->
-                Log.i("obj", obj.toString())
-            }
-        })
-    }
-
-
-    private fun observeObjects(){
-        mainActivityViewModel.objectsLiveData.observe(viewLifecycleOwner, Observer {
-            it?.let {list->
-                //adapter.objectsList = list
-            }
-        })
-    }
 
     private fun observeObjectsWithCategory(){
         mainActivityViewModel.objectsWithCategory.observe(viewLifecycleOwner, Observer {
