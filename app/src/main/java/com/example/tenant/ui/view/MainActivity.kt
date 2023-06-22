@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -48,6 +49,8 @@ class MainActivity: AppCompatActivity(){
     @Inject
     lateinit var notificationRepository: NotificationRepository
 
+    private lateinit var bottomNavigationView: BottomNavigationView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -71,7 +74,7 @@ class MainActivity: AppCompatActivity(){
             Log.i("size", it.size.toString())
         }
 
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
         val navController: NavController = this.findNavController(R.id.container)
         bottomNavigationView.setupWithNavController(navController)
 
@@ -79,8 +82,21 @@ class MainActivity: AppCompatActivity(){
             // Нет разрешения на использование NotificationListenerService
             val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
             startActivity(intent)
-        } else {
-            // Есть разрешение на использование NotificationListenerService
         }
+        
+        observeNotification()
+        mainActivityViewModel.getNotCheckedNotifications()
+    }
+
+    private fun observeNotification(){
+        mainActivityViewModel.notCheckedNotificationsCountLiveData.observe(this, Observer {
+            it?.let { c->
+                if(c != 0){
+                    val menuItem = bottomNavigationView.menu.findItem(R.id.notificationsFragment)
+                    val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId)
+                    badge.number = c
+                }
+            }
+        })
     }
 }

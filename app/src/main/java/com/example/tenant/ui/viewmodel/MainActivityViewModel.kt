@@ -24,6 +24,7 @@ class MainActivityViewModel(app: Application,
     val objectsLiveData = MutableLiveData<List<Obbject>>()
     val objectsWithCategory = MutableLiveData<List<ObjectAndCategory>>()
     val deletedObjectCount = MutableLiveData<Int?>()
+    val notCheckedNotificationsCountLiveData = MutableLiveData<Int>()
 
     private var objectsWithHistoryPay: List<ObjectWithHistoryPay>? = null
     val pieData = MutableLiveData<List<PieEntry>>()
@@ -142,5 +143,18 @@ class MainActivityViewModel(app: Application,
 
     fun getAllNotifications() = viewModelScope.launch(Dispatchers.IO) {
         notificationsLiveData.postValue(notificationRepository.getAllNotification())
+    }
+
+    fun getNotCheckedNotifications() = viewModelScope.launch(Dispatchers.IO) {
+        val notifications = notificationRepository.getAllNotification()
+        var count = 0
+        for(not in notifications){
+            if(!not.isChecked)
+                count++
+            else
+                break
+        }
+
+        notCheckedNotificationsCountLiveData.postValue(count)
     }
 }
