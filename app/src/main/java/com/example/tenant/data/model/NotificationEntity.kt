@@ -11,5 +11,5 @@ data class NotificationEntity(
     val title: String,
     val message: String,
     val date: Date,
-    val isChecked: Boolean
+    var isChecked: Boolean
 )

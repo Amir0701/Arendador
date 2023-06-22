@@ -99,4 +99,9 @@ class MainActivity: AppCompatActivity(){
             }
         })
     }
+
+    fun notificationsWereChecked(){
+        val menuItem = bottomNavigationView.menu.findItem(R.id.notificationsFragment)
+        bottomNavigationView.removeBadge(menuItem.itemId)
+    }
 }

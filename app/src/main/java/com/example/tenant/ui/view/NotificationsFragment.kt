@@ -29,6 +29,7 @@ class NotificationsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         notificationRecyclerView = view.findViewById(R.id.notificationRecycler)
+        (activity as MainActivity).supportActionBar?.title = "Уведомления"
         mainActivityViewModel = (activity as MainActivity).mainActivityViewModel
         mainActivityViewModel.getAllNotifications()
         initRecycler()
@@ -47,6 +48,17 @@ class NotificationsFragment : Fragment() {
                 if(list.isEmpty())
                     Log.i("not", "is")
                 notificationsAdapter.notifications.submitList(list)
+
+                for(notification in list){
+                    if(!notification.isChecked){
+                        notification.isChecked = true
+                        mainActivityViewModel.addNotification(notification)
+                    }
+                    else
+                        break
+                }
+
+                (activity as MainActivity).notificationsWereChecked()
             }
         })
     }
