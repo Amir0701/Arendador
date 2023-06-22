@@ -1,6 +1,7 @@
 package com.example.tenant.ui.view
 
 import android.app.AlertDialog
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -141,33 +142,31 @@ class DiagramFragment : Fragment() {
 
         pieChart.dragDecelerationFrictionCoef = 0.99f
         pieChart.isDrawHoleEnabled = true
-        pieChart.setHoleColor(Color.BLACK)
         pieChart.transparentCircleRadius = 45f
-
-//        val values = mutableListOf<PieEntry>()
-//        values.add(PieEntry(200000f, "Двухкомнатная квартира на Пирогова"))
-//        values.add(PieEntry(250000f, "Дача"))
-//        values.add(PieEntry(500000f, "Трехкомнатная квартира на Пушкина"))
-//        values.add(PieEntry(302000f, "Трехкомнатная квартира на Лещина"))
 
         var sum = 0f
         list.forEach { pieEntry ->
             sum += pieEntry.value
         }
+
         val description = Description()
         description.text = "Общая сумма доходов ${sum.toLong()}"
         description.textSize = 12f
         pieChart.description = description
-        description.textColor = Color.WHITE
+
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDarkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES
+        if(isDarkTheme){
+            pieChart.setHoleColor(Color.BLACK)
+            description.textColor = Color.WHITE
+        }
 
         pieChart.animateY(1000, Easing.EaseInOutCubic)
 
         val pieDataSet = PieDataSet(list, "")
         pieDataSet.sliceSpace = 3f
         pieDataSet.selectionShift = 5f
-        //pieDataSet.colors = ColorTemplate.JOYFUL_COLORS
-        //pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS)
-        //pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS, context)
+
         ColorTemplate.JOYFUL_COLORS?.let {
             pieDataSet.colors = it.toList()
         }
@@ -181,7 +180,9 @@ class DiagramFragment : Fragment() {
         pieChart.setEntryLabelColor(Color.RED)
         pieChart.setCenterTextColor(Color.WHITE)
         pieChart.setDrawEntryLabels(false)
-        pieChart.legend.textColor = Color.WHITE
+        if(isDarkTheme){
+            pieChart.legend.textColor = Color.WHITE
+        }
         pieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{
             override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -210,14 +211,7 @@ class DiagramFragment : Fragment() {
 
         exploitationPieChart.dragDecelerationFrictionCoef = 0.99f
         exploitationPieChart.isDrawHoleEnabled = true
-        exploitationPieChart.setHoleColor(Color.BLACK)
         exploitationPieChart.transparentCircleRadius = 45f
-
-//        val values = mutableListOf<PieEntry>()
-//        values.add(PieEntry(200000f, "Двухкомнатная квартира на Пирогова"))
-//        values.add(PieEntry(250000f, "Дача"))
-//        values.add(PieEntry(500000f, "Трехкомнатная квартира на Пушкина"))
-//        values.add(PieEntry(302000f, "Трехкомнатная квартира на Лещина"))
 
         var sum = 0f
         list.forEach { pieEntry ->
@@ -227,7 +221,13 @@ class DiagramFragment : Fragment() {
         description.text = "Общая сумма расходов на эксплуатацию ${sum.toLong()}"
         description.textSize = 12f
         exploitationPieChart.description = description
-        description.textColor = Color.WHITE
+
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDarkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES
+        if(isDarkTheme){
+            pieChart.setHoleColor(Color.BLACK)
+            description.textColor = Color.WHITE
+        }
 
         exploitationPieChart.animateY(1000, Easing.EaseInOutCubic)
 
@@ -246,7 +246,10 @@ class DiagramFragment : Fragment() {
         exploitationPieChart.setEntryLabelColor(Color.RED)
         exploitationPieChart.setCenterTextColor(Color.WHITE)
         exploitationPieChart.setDrawEntryLabels(false)
-        exploitationPieChart.legend.textColor = Color.WHITE
+        if(isDarkTheme){
+            exploitationPieChart.legend.textColor = Color.WHITE
+        }
+
         exploitationPieChart.legend.isWordWrapEnabled = true
         exploitationPieChart.legend.orientation = Legend.LegendOrientation.VERTICAL
         exploitationPieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener{

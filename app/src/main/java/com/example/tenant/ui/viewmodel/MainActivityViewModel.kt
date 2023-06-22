@@ -83,8 +83,8 @@ class MainActivityViewModel(app: Application,
                     if(payYear == year)
                         sum += historyPay.sum
                 }
-
-                data.add(PieEntry(sum.toFloat(), it.obbject.name))
+                if(sum != 0)
+                    data.add(PieEntry(sum.toFloat(), it.obbject.name))
             }
         }
 
