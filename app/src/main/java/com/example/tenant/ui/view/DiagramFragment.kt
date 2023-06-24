@@ -225,7 +225,7 @@ class DiagramFragment : Fragment() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDarkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES
         if(isDarkTheme){
-            pieChart.setHoleColor(Color.BLACK)
+            exploitationPieChart.setHoleColor(Color.BLACK)
             description.textColor = Color.WHITE
         }
 
