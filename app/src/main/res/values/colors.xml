@@ -12,4 +12,9 @@
     <color name="blue">#0A59CF</color>
     <color name="orange">#FF9800</color>
     <color name="purple_300">#9C27B0</color>
+    <color name="blue700">#303F9F</color>
+    <color name="blue500">#3F51B5</color>
+    <color name="blueAcc">#03A9F4</color>
+    <color name="grey_back">#f2f2f2</color>
+    <color name="dark_back">#121212</color>
 </resources>

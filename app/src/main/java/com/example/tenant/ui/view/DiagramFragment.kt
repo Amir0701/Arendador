@@ -157,8 +157,11 @@ class DiagramFragment : Fragment() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDarkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES
         if(isDarkTheme){
-            pieChart.setHoleColor(Color.BLACK)
+            pieChart.setHoleColor(resources.getColor(R.color.dark_back))
             description.textColor = Color.WHITE
+        }
+        else{
+            pieChart.setHoleColor(resources.getColor(R.color.grey_back))
         }
 
         pieChart.animateY(1000, Easing.EaseInOutCubic)
@@ -225,8 +228,11 @@ class DiagramFragment : Fragment() {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val isDarkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES
         if(isDarkTheme){
-            exploitationPieChart.setHoleColor(Color.BLACK)
+            exploitationPieChart.setHoleColor(resources.getColor(R.color.dark_back))
             description.textColor = Color.WHITE
+        }
+        else{
+            exploitationPieChart.setHoleColor(resources.getColor(R.color.grey_back))
         }
 
         exploitationPieChart.animateY(1000, Easing.EaseInOutCubic)
